@@ -1,0 +1,49 @@
+
+@{
+    ViewData["Title"] = "Calendar";
+}
+@section Styles {
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
+    <link href='~/css/Calendar/fullcalendar/packages/core/main.css' rel='stylesheet' />
+    <link href='~/css/Calendar/fullcalendar/packages/daygrid/main.min.css' rel='stylesheet' />
+    <link rel="stylesheet" href="~/css/Calendar/css/style.css">
+}
+
+@if (ViewData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @ViewData["Message"]
+    </div>
+}
+  <div class="content">
+    <div id='calendar'></div>
+  </div>
+    
+
+
+@section Scripts {
+    <script src='~/css/Calendar/fullcalendar/packages/core/main.js'></script>
+    <script src='~/css/Calendar/fullcalendar/packages/interaction/main.js'></script>
+    <script src='~/css/Calendar/fullcalendar/packages/daygrid/main.js'></script>
+    <!-- Page-specific script -->
+    <script src="~/js/Calendar/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: [ 'interaction', 'dayGrid' ],
+                editable: true,
+                eventLimit: true, // allow "more" link when too many events
+                events: '/calendar/events',
+                eventClick: function (info) {
+                    // Show project details on event click
+                    alert('Project: ' + info.event.title + '\nDescription: ' + info.event.extendedProps.description);
+                }
+            });
+            calendar.render();
+        });
+    </script>
+
+}
+

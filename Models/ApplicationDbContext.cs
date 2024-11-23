@@ -49,6 +49,24 @@ namespace _.Models
                 .WithMany(e => e.ReunionParticipants)
                 .HasForeignKey(rp => rp.EmployeeId);
 
+            modelBuilder.Entity<TrackedProjects>()
+                .HasKey(tp => new { tp.EmployeeId, tp.ProjectId });
+            
+            modelBuilder.Entity<TrackedProjects>()
+                .HasOne(tp => tp.Project)
+                .WithMany(p => p.TrackedByEmployees)
+                .HasForeignKey(tp => tp.ProjectId);
+
+            modelBuilder.Entity<TrackedProjects>()
+                .HasOne(tp => tp.Employee)
+                .WithMany(e => e.TrackedProjects)
+                .HasForeignKey(tp => tp.EmployeeId);
+            
+            modelBuilder.Entity<Project>()
+                .HasOne(p => p.Manager) // One Manager
+                .WithMany() // Can manage multiple projects (no inverse navigation from ApplicationUser)
+                .HasForeignKey(p => p.ManagerId) // Foreign key in the Project table
+                .OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -13,9 +13,19 @@ public class Repository<T> : IRepository<T> where T : class
         _dbSet = _context.Set<T>();
     }
 
+    public IQueryable<T> GetAll() => _dbSet.AsQueryable();
+
     public async Task<IEnumerable<T>> GetAllAsync() => await _dbSet.ToListAsync();
 
-    public async Task<T> GetByIdAsync(int id) => await _dbSet.FindAsync(id);
+    public async Task<T> GetByIdAsync(int id)
+    {
+        var entity = await _dbSet.FindAsync(id);
+        if (entity == null)
+        {
+            throw new KeyNotFoundException($"Entity with id {id} not found.");
+        }
+        return entity;
+    }
 
     public async Task AddAsync(T entity)
     {
