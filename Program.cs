@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using _.Models;
 using _.Repositories;
+using _.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -14,6 +15,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // add mapping of the services 
+builder.Services.AddScoped<IPointageService, PointageService>();
+builder.Services.AddScoped<IRepository<Pointage>, Repository<Pointage>>();
 
 var app = builder.Build();
 

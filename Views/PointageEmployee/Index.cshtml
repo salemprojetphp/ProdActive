@@ -1,0 +1,98 @@
+@model IEnumerable<_.Models.Pointage>
+
+@{
+    ViewData["Title"] = "Attendance System";
+}
+@{
+    var transactionTypes = ViewData["TransactionTypes"] as Dictionary<int, string> ?? new Dictionary<int, string>();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/vendors/select2/select2.min.css">
+    <link rel="stylesheet" href="~/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+    <style>
+        select.form-select {
+            color : #000000 !important;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="row">
+        @await Html.PartialAsync("_Create", new _.Models.Pointage())
+
+        <!-- chart for the week for Attendance  -->
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card bg-primary card-rounded">
+                <div class="card-body">
+                    <h4 class="card-title" style="color :#FFFFFFaa">Attendance this week</h4>
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Attendance History Table -->
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Attendance History</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Date)</th>
+                            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().TransactionType)</th>
+                            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Employee)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                                <td>
+                                    @* Use the dictionary to convert the TransactionType value *@
+                                    @(transactionTypes != null ? transactionTypes.GetValueOrDefault(item.TransactionType, "Unknown") : "Unknown")
+                                </td>
+                                <td>@(item.Employee != null ? Html.DisplayFor(modelItem => item.Employee.UserName) : "Unknown")</td>
+                                <td>
+                                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display: inline-block;">
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Dashboard/jquery.cookie.js" type="text/javascript"></script>
+    <script src="~/vendors/chart.js/chart.umd.js"></script>
+    <script src="~/js/Dashboard/dashboard.js"></script>
+    <script src="~/js/EmployeeAttendance/WeekAttendance.js"></script>
+    <script>
+        function updateProgressBar() {
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0); 
+            const totalDaysInMonth = lastDay.getDate();
+            const currentDay = now.getDate();
+            const progressPercentage = (currentDay / totalDaysInMonth) * 100;
+            const progressBar = document.querySelector('.progress-bar');
+            const progressText = document.querySelector('.progress-text');
+            progressBar.style.width = `${progressPercentage}%`;
+            progressText.textContent = `${Math.round(progressPercentage)}% of the month completed`;
+        }    
+        //setInterval(updateProgressBar, 1000);
+        //updateProgressBar();
+    </script>
+}
