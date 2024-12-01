@@ -31,7 +31,6 @@
             </div>
         </div>
 
-
     </div>
 
     <!-- Attendance History Table -->
@@ -52,12 +51,15 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@Html.DisplayFor(modelItem => item.Date)</td>
                                 <td>
-                                    @* Use the dictionary to convert the TransactionType value *@
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
+                                <td>
                                     @(transactionTypes != null ? transactionTypes.GetValueOrDefault(item.TransactionType, "Unknown") : "Unknown")
                                 </td>
-                                <td>@(item.Employee != null ? Html.DisplayFor(modelItem => item.Employee.UserName) : "Unknown")</td>
+                                <td>
+                                    @(item.Employee != null ? Html.DisplayFor(modelItem => item.Employee.UserName) : "Unknown")
+                                </td>
                                 <td>
                                     <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display: inline-block;">
                                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>

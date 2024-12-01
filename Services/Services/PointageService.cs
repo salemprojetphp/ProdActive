@@ -1,5 +1,6 @@
 using _.Models;
 using _.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,7 +17,10 @@ namespace _.Services
 
         public async Task<IEnumerable<Pointage>> GetAllAsync()
         {
-            return await _repository.GetAllAsync();
+            return await _repository.Query()
+                .OfType<Pointage>() // Ensure we only work with Pointage if T is generic
+                .Include(p => p.Employee)
+                .ToListAsync();
         }
 
         public async Task<Pointage> GetByIdAsync(int id)

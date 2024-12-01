@@ -48,6 +48,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(e => e.ReunionParticipants)
             .HasForeignKey(rp => rp.EmployeeId);
 
+        modelBuilder.Entity<Pointage>()
+            .HasOne(p => p.Employee)
+            .WithMany(e => e.Pointages)
+            .HasForeignKey(p => p.EmployeeId);
+
         base.OnModelCreating(modelBuilder);
     }
 }
