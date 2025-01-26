@@ -20,6 +20,8 @@
     <!-- Plugin css for this page -->
     <link rel="stylesheet" href="~/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
     <link rel="stylesheet" type="text/css" href="~/css/select.dataTables.min.css">
+    @await RenderSectionAsync("Styles", required: false)
+
 </head>
 <body>
     @await Html.PartialAsync("_Navbar")

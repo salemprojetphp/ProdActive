@@ -1,0 +1,60 @@
+@section styles{
+    <link rel="stylesheet" href="~/vendors/feather/feather.css">
+    <link rel="stylesheet" href="~/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="~/vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/vendors/typicons/typicons.css">
+    <link rel="stylesheet" href="~/vendors/simple-line-icons/css/simple-line-icons.css">
+    <link rel="stylesheet" href="~/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="~/vendors/select2/select2.min.css">
+    <link rel="stylesheet" href="~/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="~/css/site.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="~/images/favicon.png" />
+    
+}
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title"> Feedback form</h4>
+        <form asp-action="Create" asp-controller="Feedback" method="post" class="forms-sample">
+            <div class="form-group">
+                <label asp-for="Subject">Subject</label>
+                <input type="text" class="form-control" id="Subject" placeholder="Subject">
+            </div>
+            <div class="form-group">
+            <label for="Message">Feedback</label>
+            <input type="text" class="form-control" id="Message" placeholder="feedback">
+            </div>
+            <div class="form-check form-check-flat form-check-primary">
+            <button type="submit" class="btn btn-primary me-2">Submit</button>
+            <button class="btn btn-light">Cancel</button>
+        </form>
+    </div>
+</div>
+@section scripts{
+<!-- plugins:js -->
+    <script src="~/vendors/js/vendor.bundle.base.js"></script>
+    <script src="~/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="~/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="~/vendors/select2/select2.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="~/js/Dashboard/off-canvas.js"></script>
+    <script src="~/js/Dashboard/template.js"></script>
+    <script src="~/js/Dashboard/settings.js"></script>
+    <script src="~/js/Dashboard/hoverable-collapse.js"></script>
+    <script src="~/js/Dashboard/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="~/js/Dashboard/file-upload.js"></script>
+    <script src="~/js/Dashboard/typeahead.js"></script>
+    <script src="~/js/Dashboard/select2.js"></script>
+}
