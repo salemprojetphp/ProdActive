@@ -8,63 +8,97 @@ using Microsoft.EntityFrameworkCore;
 public class UserService : IUserService
 {
     private readonly IRepository<TrackedProjects> _trackedProjectsRepository;
-    private readonly IRepository<Project> _projectRepository;
+    private readonly IRepository<ProjectEmployee> _projectEmployeeRepository;
+    private readonly IRepository<ReunionParticipant> _reunionParticipantRepository;
 
-    public UserService(IRepository<TrackedProjects> trackedProjectsRepository,IRepository<Project> projectRepository)
+    public UserService(IRepository<TrackedProjects> trackedProjectsRepository, 
+                       IRepository<ProjectEmployee> projectEmployeeRepository,
+                       IRepository<ReunionParticipant> reunionParticipantRepository)
     {
         _trackedProjectsRepository = trackedProjectsRepository;
-        _projectRepository = projectRepository;
+        _projectEmployeeRepository = projectEmployeeRepository;
+        _reunionParticipantRepository = reunionParticipantRepository;
+    }
+    
+    public async Task<List<Project>> GetAllProjectsAsync(string userId)
+    {
+        // Get all ProjectEmployee records
+        var projects = _projectEmployeeRepository.GetAll();
+
+        // Filter the projects by the userId and select the related projects
+        var userProjects= await projects
+            .Where(pe=> pe.EmployeeId == userId)
+            .Select(pe=>pe.Project!)
+            .ToListAsync();
+        
+        return userProjects;
     }
 
-    
     public async Task<List<Project>> GetTrackedProjectsAsync(string userId)
     {
-        // Get all ProjectEmployee records where the user is tracking projects
-        var userProjects = _trackedProjectsRepository.GetAll();
+        // Get all TrackedEmployee records
+        var trackedProjects = _trackedProjectsRepository.GetAll();
 
         // Filter the records by the userId and select the related projects
-        var trackedProjects = await userProjects
+        var userTrackedProjects = await trackedProjects
             .Where(pe => pe.EmployeeId == userId)
             .Select(pe => pe.Project!)
             .ToListAsync();
 
-        return trackedProjects;
+        return userTrackedProjects;
     }
 
-    // public async Task AddTrackedProjectAsync(string userId, int projectId)
-    // {
-    //     // Check if the user is already tracking the project
-    //     var userProjects = await _trackedProjectsRepository.GetAllAsync();
-    //     if (userProjects.Any(pe => pe.EmployeeId == userId && pe.ProjectId == projectId))
-    //     {
-    //         throw new InvalidOperationException("The user is already tracking this project.");
-    //     }
+    public async Task<List<Reunion>> GetReunionsAsync(string userId)
+    {
+        // Get all ReunionParticipant records
+        var reunions = _reunionParticipantRepository.GetAll();
 
-    //     // Create a new ProjectEmployee record
-    //     var projectEmployee = new ProjectEmployee
-    //     {
-    //         EmployeeId = userId,
-    //         ProjectId = projectId
-    //     };
+        // Filter the records by the userId and select the related reunions
+        var userReunions = await reunions
+            .Where(pe => pe.EmployeeId == userId)
+            .Select(pe => pe.Reunion!)
+            .ToListAsync();
 
-    //     // Save it to the database
-    //     await _trackedProjectsRepository.AddAsync(projectEmployee);
-    // }
+        return userReunions;
+    }
 
- 
-    // public async Task RemoveTrackedProjectAsync(string userId, int projectId)
-    // {
-    //     // Find the ProjectEmployee record
-    //     var userProjects = await _trackedProjectsRepository.GetAllAsync();
-    //     var projectEmployee = userProjects
-    //         .FirstOrDefault(pe => pe.EmployeeId == userId && pe.ProjectId == projectId);
+    public async Task AddTrackedProjectsAsync(string userId, List<int> projectIds)
+    {
+        var existingTrackedProjects = await _trackedProjectsRepository.GetAll()
+            .Where(pe => pe.EmployeeId == userId)
+            .ToListAsync();
 
-    //     if (projectEmployee == null)
-    //     {
-    //         throw new KeyNotFoundException("The user is not tracking this project.");
-    //     }
+        var projectsToTrack = projectIds
+            .Where(id => !existingTrackedProjects.Any(tp => tp.ProjectId == id))
+            .Select(id => new TrackedProjects
+            {
+                EmployeeId = userId,
+                ProjectId = id
+            })
+            .ToList();
+        
+        if (projectsToTrack.Any())
+        {
+            await _trackedProjectsRepository.AddRangeAsync(projectsToTrack);
+        }
+    }
 
-    //     // Remove it from the database
-    //     await _trackedProjectsRepository.DeleteAsync(projectEmployee.ProjectId);
-    // }
+    public async Task<bool> RemoveTrackedProjectAsync(string userId, int projectId)
+    {
+        // Find the tracked project in the TrackedProjects table
+        var trackedProject = await _trackedProjectsRepository.GetAll()
+            .FirstOrDefaultAsync(tp => tp.EmployeeId == userId && tp.ProjectId == projectId);
+
+        if (trackedProject != null)
+        {
+            var result= await _trackedProjectsRepository.DeleteEntityAsync(trackedProject);
+            return result;
+        }
+        return false;
+    }
+
+
+
+
+
 }

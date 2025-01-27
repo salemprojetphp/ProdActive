@@ -714,6 +714,18 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
   opacity: 0.65;
 }
 
+.fc-track-button {
+  color: #fff;
+  background-color: #14935c;
+  border-color: #14935c;
+}
+
+.fc-track-button:hover {
+  color: #fff;
+  background-color: #0f6f46;
+  border-color: #0f6f46;
+}
+
 /* "primary" coloring */
 .fc-button-primary {
   color: #fff;

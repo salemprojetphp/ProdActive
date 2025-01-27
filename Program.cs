@@ -8,13 +8,20 @@ using _.Services.Services;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Add services to the container.
+// Add services and repos to the container.
 builder.Services.AddControllersWithViews();
+
+//REPOSITORIES
 builder.Services.AddScoped<IRepository<Project>, Repository<Project>>();
-builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IRepository<ProjectEmployee>, Repository<ProjectEmployee>>();
 builder.Services.AddScoped<IRepository<TrackedProjects>, Repository<TrackedProjects>>();
+builder.Services.AddScoped<IRepository<ProjectEmployee>, Repository<ProjectEmployee>>();
+builder.Services.AddScoped<IRepository<ReunionParticipant>, Repository<ReunionParticipant>>();
+
+//SERVICES
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+
 
 
 // Add DbContext and Identity services

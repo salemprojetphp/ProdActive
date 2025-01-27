@@ -33,6 +33,12 @@ public class Repository<T> : IRepository<T> where T : class
         await _context.SaveChangesAsync();
     }
 
+    public async Task AddRangeAsync(List<T> entities)
+    {
+        await _dbSet.AddRangeAsync(entities);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task UpdateAsync(T entity)
     {
         _dbSet.Update(entity);
@@ -49,6 +55,17 @@ public class Repository<T> : IRepository<T> where T : class
         }
     }
 
+    public async Task<bool> DeleteEntityAsync(T entity)
+    {
+        if (entity != null)
+        {
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        return false;
+    }
+
     System.Threading.Tasks.Task IRepository<T>.AddAsync(T entity)
     {
         throw new NotImplementedException();
@@ -63,4 +80,6 @@ public class Repository<T> : IRepository<T> where T : class
     {
         throw new NotImplementedException();
     }
+
+    
 }

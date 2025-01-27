@@ -10,15 +10,68 @@
     <link rel="stylesheet" href="~/css/Calendar/css/style.css">
 }
 
-@if (ViewData["Message"] != null)
+@* @if (ViewData["Message"] != null)
 {
     <div class="alert alert-info">
         @ViewData["Message"]
     </div>
-}
-  <div class="content">
-    <div id='calendar'></div>
-  </div>
+} *@
+    <div class="content">
+        <div id='calendar'></div>
+    </div>
+    <!-- Track Projects Modal -->
+    <div class="modal fade" id="trackProjectModal" tabindex="-1" aria-labelledby="trackProjectModalLabel" style="display: none;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="trackProjectModalLabel">Track Projects</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="projectList" class="form-check form-check-primary">
+                        @if(Model.Count == 0)
+                        {
+                            <p>All your projects are tracked.</p>
+                        }
+                        else
+                        {
+                            <h6>Select projects to track:</h6>
+                            @foreach (var project in Model)
+                            {
+                                <div class="form-check" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                                    <label class="form-check-label" for="project-@project.Id">
+                                        @project.Title
+                                    </label>
+                                    <button type="button" class="btn btn-success track-button" data-project-id="@project.Id" style="height: 30px; text-align: center; line-height: 0px;">Track</button>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Event Details Modal -->
+    <div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventDetailsModalLabel" style="display: none;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventDetailsModalLabel">Event Details</h5>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <div id="untrackSection" style="display:none;">
+                        <button type="button" class="btn btn-danger" id="untrackButton">Untrack</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     
 
 
@@ -34,15 +87,244 @@
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 plugins: [ 'interaction', 'dayGrid' ],
                 editable: true,
-                eventLimit: true, // allow "more" link when too many events
+                //eventLimit: true, // allow "more" link when too many events 
                 events: '/calendar/events',
                 eventClick: function (info) {
                     // Show project details on event click
-                    alert('Project: ' + info.event.title + '\nDescription: ' + info.event.extendedProps.description);
+                    const event = info.event;
+                    // Open the modal and show event details
+                    showEventDetails(event);
                 }
             });
             calendar.render();
-        });
+
+            // Function to show event details in a modal
+            function showEventDetails(event) {
+                const eventModal = $('#eventDetailsModal');
+                const modalTitle = eventModal.find('.modal-title');
+                const modalBody = eventModal.find('.modal-body');
+                const untrackButton = eventModal.find('#untrackButton');
+                const untrackSection = eventModal.find('#untrackSection');
+
+                modalBody.empty();
+                // Set the event details in the modal
+                modalTitle.text(event.title);  // Event title (project or meeting)
+
+                // Display the meeting details if it's a meeting
+                if (event.extendedProps.type === 'meeting') {
+                    modalBody.append(`
+                        <p><strong>Description:</strong> ${event.extendedProps.description || 'No description available'}</p>
+                        <p><strong>Start Date:</strong> ${event.start.toLocaleString()}</p>
+                        <p><strong>End Date:</strong> ${event.end ? event.end.toLocaleString() : 'N/A'}</p>
+                        <p><strong>Location:</strong> ${event.extendedProps.lieu === 0 ? 'Onsite' : 'Online'}</p>
+                        <p><strong>Duration:</strong> ${event.extendedProps.duree || 'Not specified'} hours</p>
+                        <p><strong>Status:</strong> ${getMeetingStatus(event.extendedProps.status)}</p>
+                        <p><strong>Project Affiliated:</strong> ${event.extendedProps.project ? event.extendedProps.project.title : 'No affiliated project'}</p>
+                    `);
+                }
+
+                // Display the project details if it's a project
+                if (event.extendedProps.type === 'project') {
+                    modalBody.append(`
+                        <p><strong>Description:</strong> ${event.extendedProps.description || 'No description available'}</p>
+                        <p><strong>Start Date:</strong> ${event.start.toLocaleString()}</p>
+                        <p><strong>End Date:</strong> ${event.end ? event.end.toLocaleString() : 'N/A'}</p>
+                    `);
+                }
+                // Check if the event is a project and not cancelled or completed
+                if (event.extendedProps.type === 'project' && event.extendedProps.status !== 'Cancelled' && event.extendedProps.status !== 'Completed') {
+                    untrackSection.show(); // Show "Untrack" button if it's a trackable project
+                } else {
+                    untrackSection.hide(); // Hide "Untrack" button if it's not a trackable project
+                }
+
+                // Open the modal
+                eventModal.modal('show');
+
+                // Event handler for untracking the project
+                untrackButton.off('click').on('click', function() {
+                    untrackProject(event.extendedProps.projectId);  // Call function to untrack the project
+                });
+            }
+
+            // Function to get meeting status (based on status code)
+            function getMeetingStatus(statusCode) {
+                switch (statusCode) {
+                    case 1: return 'Upcoming (Ulterieure)';
+                    case 0: return 'Completed (Terminee)';
+                    case -1: return 'Cancelled (Annulee)';
+                    default: return 'Unknown status';
+                }
+            }
+
+            const closeButtonEventDetails = document.querySelector('.btn-secondary');
+            closeButtonEventDetails.addEventListener('click', () => {
+                $('#eventDetailsModal').modal('hide'); // Hide the modal
+            });
+
+            // Function to untrack the project
+            function untrackProject(projectId) {
+                fetch('/calendar/untrackProject', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(projectId) // Send the projectId directly
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Project untracked successfully!');
+                        $('#eventDetailsModal').modal('hide'); // Close the modal
+                        updateModalProjects(); // Refresh the modal with the updated list of projects
+                        calendar.refetchEvents(); // Refresh events on the calendar
+                    } else {
+                        alert('Error untracking project.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error untracking project:', error);
+                    alert('Error untracking project.');
+                });
+            }
+            
+            // Add custom button to track projects
+            let trackButtonContainer = document.querySelector('.fc-right'); 
+            var trackButton = document.createElement('button');
+            trackButton.innerHTML = 'Track Project';
+            trackButton.classList.add('fc-button');
+            trackButton.style.backgroundColor = '#14935c';
+            trackButton.style.color = '#fff';
+            trackButton.style.borderColor = '#14935c';
+            trackButton.addEventListener('mouseover', () => {
+                trackButton.style.backgroundColor = "0f6f46";
+                trackButton.style.borderColor = "0f6f46";
+
+            });
+            trackButton.addEventListener('mouseout', () => {
+                trackButton.style.backgroundColor = "14935c";
+                trackButton.style.borderColor = "14935c";
+            });
+            // Show modal when button is clicked
+            trackButton.addEventListener('click', function () {
+                $('#trackProjectModal').modal('show'); // Show the modal
+            });
+
+            trackButtonContainer.appendChild(trackButton);
+            const trackButtons = document.querySelectorAll('.track-button');
+            trackButtons.forEach((button) => {
+                button.addEventListener('click', (e) => {
+                    const projectId = e.target.getAttribute('data-project-id'); // Get project ID
+                    fetch('/calendar/trackProjects', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify([parseInt(projectId)]) // Send project ID to the backend
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Refresh the modal with the updated list of projects
+                            updateModalProjects();
+                            // Optionally, refresh the calendar events to reflect changes
+                            fetch('/calendar/events')
+                            .then(response => response.json())
+                            .then(events => {
+                                // Remove all existing events
+                                calendar.removeAllEventSources();
+                                calendar.addEventSource(events); // Add updated events
+                            })
+                            .catch(error => {
+                                alert('Error fetching updated calendar events.');
+                                console.error('Error:', error);
+                            });
+                        } else {
+                            alert('Error tracking project.');
+                        }
+                    })
+                    .catch(error => {
+                        alert('Error tracking project.');
+                        console.error('Error:', error);
+                    });
+                });
+            });
+            
+            const closeButtonProjectTrack = document.querySelector('.btn-secondary');
+            closeButtonProjectTrack.addEventListener('click', () => {
+                $('#trackProjectModal').modal('hide'); // Hide the modal
+            });
+
+            // Update the modal with the updated list of projects
+            function updateModalProjects() {
+                fetch('/calendar/getAllProjectsToTrack')
+                .then(response => response.json())
+                .then(data => {
+                    const projectListContainer = document.getElementById('projectList');
+                    projectListContainer.innerHTML = ''; // Clear existing list
+
+                    if (data.length === 0) {
+                        projectListContainer.innerHTML = '<p>All your projects are tracked.</p>';
+                    } else {
+                        data.forEach(project => {
+                            const projectItem = document.createElement('div');
+                            projectItem.classList.add('form-check');
+                            projectItem.style.display = 'flex';
+                            projectItem.style.flexDirection = 'row';
+                            projectItem.style.justifyContent = 'space-between';
+                            projectItem.style.alignItems = 'center';
+
+                            const button = document.createElement('button');
+                            button.setAttribute('type', 'button');
+                            button.classList.add('btn', 'btn-success', 'track-button');
+                            button.setAttribute('data-project-id', project.id);
+                            button.style.height = '30px';
+                            button.style.textAlign = 'center';
+                            button.style.lineHeight = '0px';
+                            button.textContent = 'Track';
+
+                            // Add event listener to track button
+                            button.addEventListener('click', function (e) {
+                                const projectId = e.target.getAttribute('data-project-id'); // Get project ID
+                                fetch('/calendar/trackProjects', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify([parseInt(projectId)]) // Send project ID to the backend
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        updateModalProjects(); // Refresh the modal with updated list of projects
+                                        calendar.refetchEvents(); // Refresh events on the calendar
+                                    } else {
+                                        alert('Error tracking project.');
+                                    }
+                                })
+                                .catch(error => {
+                                    alert('Error tracking project.');
+                                    console.error('Error:', error);
+                                });
+                            });
+
+                            const label = document.createElement('label');
+                            label.classList.add('form-check-label');
+                            label.setAttribute('for', `project-${project.id}`);
+                            label.textContent = project.title;
+
+                            projectItem.appendChild(label);
+                            projectItem.appendChild(button);
+                            projectListContainer.appendChild(projectItem);
+                        });
+                    }
+                })
+                .catch(error => {
+                    alert('Error fetching projects.');
+                    console.error('Error:', error);
+                });
+            }
+        });   
     </script>
 
 }
