@@ -1,0 +1,43 @@
+{
+  "labels": [
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+    "Sun"
+  ],
+  "datasets": [
+    {
+      "label": "Working Hours",
+      "data": [
+        "00:00:00",
+        "09:30:00",
+        "09:30:00",
+        "08:00:00",
+        "08:00:00",
+        "08:00:00",
+        "00:00:00"
+      ],
+      "backgroundColor": "rgba(54, 162, 235, 0.75)",
+      "borderColor": "rgba(54, 162, 235, 1)",
+      "borderWidth": 1
+    },
+    {
+      "label": "Pause Hours",
+      "data": [
+        "00:00:00",
+        "00:30:00",
+        "00:30:00",
+        "01:00:00",
+        "01:00:00",
+        "01:00:00",
+        "00:00:00"
+      ],
+      "backgroundColor": "rgba(255, 159, 64, 0.75)",
+      "borderColor": "rgba(255, 159, 64, 1)",
+      "borderWidth": 1
+    }
+  ]
+}

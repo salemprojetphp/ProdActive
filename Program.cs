@@ -51,9 +51,7 @@ builder.Services.Configure<IdentityOptions>(options =>{
     options.User.RequireUniqueEmail = false;
 });
 // add mapping of the services 
-var emailConfig = builder.Configuration.GetSection("EmailConfiguration");
-    //.Get<EmailConfiguration>();
-builder.Services.AddSingleton(emailConfig);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,20 +1,19 @@
 using _.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
-namespace _.Repositories;
-
-public class Repository<T> : IRepository<T> where T : class
+namespace _.Repositories
 {
-    private readonly ApplicationDbContext _context;
-    private readonly DbSet<T> _dbSet;
-
-    public Repository(ApplicationDbContext context)
+    public class Repository<T> : IRepository<T> where T : class
     {
-        _context = context;
-        _dbSet = _context.Set<T>();
-    }
+        private readonly ApplicationDbContext _context;
+        private readonly DbSet<T> _dbSet;
 
-    public IQueryable<T> GetAll() => _dbSet.AsQueryable();
+        public Repository(ApplicationDbContext context)
+        {
+            _context = context;
+            _dbSet = _context.Set<T>();
+        }
 
     public IQueryable<T> GetAll() => _dbSet.AsQueryable();
 
@@ -45,11 +44,11 @@ public class Repository<T> : IRepository<T> where T : class
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(T entity)
-    {
-        _dbSet.Update(entity);
-        await _context.SaveChangesAsync();
-    }
+        public async Task UpdateAsync(T entity)
+        {
+            _dbSet.Update(entity);
+            await _context.SaveChangesAsync();
+        }
 
     public async Task DeleteAsync(int id)
     {
@@ -72,6 +71,10 @@ public class Repository<T> : IRepository<T> where T : class
         return false;
     }
 
+    public IQueryable<T> Query()
+    {
+        return _dbSet.AsQueryable();
+    }
     System.Threading.Tasks.Task IRepository<T>.AddAsync(T entity)
     {
         throw new NotImplementedException();
@@ -85,6 +88,8 @@ public class Repository<T> : IRepository<T> where T : class
     System.Threading.Tasks.Task IRepository<T>.DeleteAsync(int id)
     {
         throw new NotImplementedException();
+    }
+
     }
 
     

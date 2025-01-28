@@ -17,8 +17,7 @@
     <link rel="stylesheet" href="~/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
     <!-- endinject -->
     @await RenderSectionAsync("Styles", required: false)
-    <link rel="stylesheet" href="~/css/Dashboard/site.css" asp-append-version="true" />
-
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
     @if (User.Identity != null && User.Identity.IsAuthenticated){

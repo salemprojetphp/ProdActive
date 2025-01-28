@@ -1,0 +1,71 @@
+@model IEnumerable<_.Models.Pointage>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@section Styles {
+}
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="home-tab">
+      <div class="tab-content tab-content-basic">
+        <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="statistics-details d-flex align-items-center justify-content-between">
+                <div>
+                  <p class="statistics-title">Pourcentage d'avancement du projet</p>
+                  <h3 class="rate-percentage">75%</h3>
+                  <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+5%</span></p>
+                </div>
+                <div>
+                  <p class="statistics-title">Durée restante estimée pour le projet</p>
+                  <h3 class="rate-percentage">15 jours</h3>
+                  <p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-2 jours</span></p>
+                </div>
+                <div>
+                  <p class="statistics-title">Taux de ponctualité</p>
+                  <h3 class="rate-percentage">85%</h3>
+                  <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+3%</span></p>
+                </div>
+                <div class="d-none d-md-block">
+                  <p class="statistics-title">Durée moyenne des pauses</p>
+                  <h3 class="rate-percentage">45 min</h3>
+                  <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+10 min</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title card-title-dash">Analyse des pics d’activité</h4>
+        <canvas id="activityPeaksChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card card-rounded bg-primary">
+      <div class="card-body">
+        <h4 class="card-title card-title-dash" style="color :#FFFFFFaa">Heures travaillées par jour</h4>
+        <canvas id="hoursWorkedChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/js/ChefDeProjetAttendance/chart.js"></script>
+    <script src="~/vendors/chart.js/chart.umd.js"></script>
+    <script src="~/js/Dashboard/jquery.cookie.js" type="text/javascript"></script>
+}

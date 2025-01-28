@@ -1,0 +1,33 @@
+@model _.Models.Pointage
+
+@{
+    bool isWeekend = ViewData["isWeekend"] as bool? ?? false;
+}
+
+<!-- Form for Logging Attendance -->
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Log Attendance</h4>
+            <form asp-action="Create">
+                <div class="form-group">
+                    <label asp-for="TransactionType">Select Action</label>
+                    <select class="form-select form-select-sm" asp-for="TransactionType" id="exampleFormControlSelect3">
+                        <option value="1">Entry</option>
+                        <option value="0">Pause</option>
+                        <option value="2">Resume</option>
+                        <option value="-1">Exit</option>
+                    </select>
+                </div>
+                <button 
+                    type="submit" 
+                    class="btn btn-primary"
+                    @if (isWeekend)
+                    {
+                        <text>disabled</text>
+                    }
+                >Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
