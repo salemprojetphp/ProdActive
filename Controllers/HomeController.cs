@@ -2,7 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Project_ERP.Models;
 
-namespace Project_ERP.Controllers;
+namespace _.Controllers;
 
 public class HomeController : Controller
 {

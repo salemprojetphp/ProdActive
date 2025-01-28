@@ -12,6 +12,7 @@ public class Project {
     public int Expected_duree {get; set;}
     public string? ManagerId { get; set;}
     public ApplicationUser? Manager { get; set;}
-    public ICollection<ProjectEmployee>? ProjectEmployees { get; set;}
+    public ICollection<ProjectEmployee>? ProjectEmployees { get; set;} //users involved in project
     public ICollection<Tache>? Tasks { get; set;}
+    public ICollection<TrackedProjects>? TrackedByEmployees { get; set; } //users tracking project
 }
