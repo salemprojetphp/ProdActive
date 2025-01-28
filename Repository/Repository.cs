@@ -1,5 +1,7 @@
 using _.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace _.Repositories
@@ -15,34 +17,34 @@ namespace _.Repositories
             _dbSet = _context.Set<T>();
         }
 
-    public IQueryable<T> GetAll() => _dbSet.AsQueryable();
+        public IQueryable<T> GetAll() => _dbSet.AsQueryable();
 
-    public async Task<IEnumerable<T>> GetAllAsync()
-    {
-        return await _dbSet.ToListAsync();
-    }
-
-    public async Task<T> GetByIdAsync(int id)
-    {
-        var entity = await _dbSet.FindAsync(id);
-        if (entity == null)
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            throw new KeyNotFoundException($"Entity with id {id} not found.");
+            return await _dbSet.ToListAsync();
         }
-        return entity;
-    }
 
-    public async Task AddAsync(T entity)
-    {
-        await _dbSet.AddAsync(entity);
-        await _context.SaveChangesAsync();
-    }
+        public async Task<T> GetByIdAsync(int id)
+        {
+            var entity = await _dbSet.FindAsync(id);
+            if (entity == null)
+            {
+                throw new KeyNotFoundException($"Entity with id {id} not found.");
+            }
+            return entity;
+        }
 
-    public async Task AddRangeAsync(List<T> entities)
-    {
-        await _dbSet.AddRangeAsync(entities);
-        await _context.SaveChangesAsync();
-    }
+        public async Task AddAsync(T entity)
+        {
+            await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddRangeAsync(List<T> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task UpdateAsync(T entity)
         {
@@ -50,47 +52,30 @@ namespace _.Repositories
             await _context.SaveChangesAsync();
         }
 
-    public async Task DeleteAsync(int id)
-    {
-        var entity = await GetByIdAsync(id);
-        if (entity != null)
+        public async Task DeleteAsync(int id)
         {
-            _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
+            var entity = await GetByIdAsync(id);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<bool> DeleteEntityAsync(T entity)
+        {
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
+
+        public IQueryable<T> Query()
+        {
+            return _dbSet.AsQueryable();
         }
     }
-
-    public async Task<bool> DeleteEntityAsync(T entity)
-    {
-        if (entity != null)
-        {
-            _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        return false;
-    }
-
-    public IQueryable<T> Query()
-    {
-        return _dbSet.AsQueryable();
-    }
-    System.Threading.Tasks.Task IRepository<T>.AddAsync(T entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    System.Threading.Tasks.Task IRepository<T>.UpdateAsync(T entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    System.Threading.Tasks.Task IRepository<T>.DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    }
-
-    
 }

@@ -80,7 +80,7 @@
     <script src='~/css/Calendar/fullcalendar/packages/interaction/main.js'></script>
     <script src='~/css/Calendar/fullcalendar/packages/daygrid/main.js'></script>
     <!-- Page-specific script -->
-    <script src="~/js/Calendar/main.js"></script>
+    <script src="~/js/Calendar/js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
@@ -181,6 +181,7 @@
                     } else {
                         alert('Error untracking project.');
                     }
+                    location.reload();
                 })
                 .catch(error => {
                     console.error('Error untracking project:', error);
@@ -320,7 +321,6 @@
                     }
                 })
                 .catch(error => {
-                    alert('Error fetching projects.');
                     console.error('Error:', error);
                 });
             }

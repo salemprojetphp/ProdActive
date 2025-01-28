@@ -24,6 +24,7 @@ namespace _.Controllers
         // POST: Feedback/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("/Feedback")]
         public async Task<IActionResult> Create([Bind("Subject, Message,Rating")] Feedback feedback)
         {
             if (ModelState.IsValid)

@@ -18,10 +18,13 @@ builder.Services.AddScoped<IRepository<ProjectEmployee>, Repository<ProjectEmplo
 builder.Services.AddScoped<IRepository<TrackedProjects>, Repository<TrackedProjects>>();
 builder.Services.AddScoped<IRepository<ProjectEmployee>, Repository<ProjectEmployee>>();
 builder.Services.AddScoped<IRepository<ReunionParticipant>, Repository<ReunionParticipant>>();
+builder.Services.AddScoped<IRepository<Feedback>, Repository<Feedback>>();
+builder.Services.AddScoped<IRepository<Pointage>, Repository<Pointage>>();
 
 //SERVICES
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IPointageService, PointageService>();
 
 
 
