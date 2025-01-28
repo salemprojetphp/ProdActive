@@ -15,7 +15,15 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            // The user is logged in
+            return View();
+        }
+        else{
+            return Redirect("/Identity/Account/Login");
+        }
+
     }
 
     public IActionResult Privacy()
