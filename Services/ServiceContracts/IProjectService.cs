@@ -1,4 +1,4 @@
-namespace _.Services.Service_Contracts;
+namespace _.Services;
 
 using _.Models;
 

@@ -1,11 +1,11 @@
-namespace _.Services.Services;
+namespace _.Services;
 
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 using _.Models;
 using _.Repositories;
-using _.Services.Service_Contracts;
+using _.Services;
 
 public class ProjectService : IProjectService
 {

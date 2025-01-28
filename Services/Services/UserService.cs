@@ -1,8 +1,8 @@
-namespace _.Services.Services;
+namespace _.Services;
 
 using _.Models;
 using _.Repositories;
-using _.Services.Service_Contracts;
+using _.Services;
 using Microsoft.EntityFrameworkCore;
 
 public class UserService : IUserService

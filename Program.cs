@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using _.Models;
 using _.Repositories;
-using _.Services.Service_Contracts;
-using _.Services.Services;
 using _.Services;
 
 var builder = WebApplication.CreateBuilder(args);
