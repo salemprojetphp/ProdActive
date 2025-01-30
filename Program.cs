@@ -57,8 +57,17 @@ builder.Services.Configure<IdentityOptions>(options =>{
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
     options.User.RequireUniqueEmail = false;
 });
-// add mapping of the services 
 
+// Register SentimentAnalysisService and HttpClient
+builder.Services.AddHttpClient<SentimentAnalysisService>(client =>
+{
+    // Set the base URL for the sentiment analysis API
+    client.BaseAddress = new Uri("http://localhost:5000/");  // Replace with your API URL
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
+
+// add mapping of the services 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
