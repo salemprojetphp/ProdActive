@@ -83,11 +83,12 @@ namespace ProdActive.Areas.Identity.Pages.Account
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = Url.Page(
-                    "http://localhost:5055/Identity/Account/Account/ResetPassword",
+                    "/Account/ResetPassword",
                     pageHandler: null,
                     values: new { area = "Identity", code },
-                    protocol: Request.Scheme);
-
+                    protocol: Request.Scheme
+                );
+                
                 // Prepare the email to be sent
                 var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
                 var client = new SendGridClient(apiKey);
