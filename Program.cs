@@ -6,7 +6,11 @@ using _.Repositories;
 using _.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+//Load the .env variables
+DotNetEnv.Env.Load();
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
 // Add services and repos to the container.
 builder.Services.AddControllersWithViews();

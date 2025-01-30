@@ -5,3 +5,4 @@ appsettings.json
 appsettings.Development.json
 wwwroot/vendors
 wwwroot/json/*.json
+.env
