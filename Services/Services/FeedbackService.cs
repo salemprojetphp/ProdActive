@@ -8,10 +8,12 @@ namespace _.Services
     public class FeedbackService : IFeedbackService
     {
         private readonly IRepository<Feedback> _feedbackRepository;
+        private readonly SentimentAnalysisService _sentimentAnalysisService;
 
-        public FeedbackService(IRepository<Feedback> feedbackRepository)
+        public FeedbackService(IRepository<Feedback> feedbackRepository, SentimentAnalysisService sentimentAnalysisService)
         {
             _feedbackRepository = feedbackRepository;
+            _sentimentAnalysisService = sentimentAnalysisService;
         }
 
         public async Task<IEnumerable<Feedback>> GetAllFeedbackAsync()
@@ -26,6 +28,8 @@ namespace _.Services
 
         public async Task AddFeedbackAsync(Feedback feedback)
         {
+            var rating= await _sentimentAnalysisService.GetSentimentRating(feedback.Message);
+            feedback.Rating = rating;
             await _feedbackRepository.AddAsync(feedback);
         }
 
