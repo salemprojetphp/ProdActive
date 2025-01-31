@@ -20,7 +20,7 @@ namespace Project_ERP.Controllers
             _context = context;
         }
 
-        [Route("pointage-projet")]
+        [Route("attendance-overview")]
         public async Task<IActionResult> Index()
         {
             // Write data to JSON file
