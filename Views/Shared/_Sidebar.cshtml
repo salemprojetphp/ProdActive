@@ -1,26 +1,31 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
   <ul class="nav">
+
+    @* Dashboard *@
     <li class="nav-item">
-      <a class="nav-link" href="">
+      <a class="nav-link" href="/">
         <i class="mdi mdi-grid-large menu-icon"></i>
         <span class="menu-title">Dashboard</span>
       </a>
     </li>
-    <li class="nav-item nav-category">UI Elements</li>
+
+    @* UI Elements *@
+    <li class="nav-item nav-category">Other</li>
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
         <i class="menu-icon mdi mdi-floor-plan"></i>
-        <span class="menu-title">UI Elements</span>
+        <span class="menu-title">Attendance</span>
         <i class="menu-arrow"></i>
       </a>
       <div class="collapse" id="ui-basic">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" href="">Buttons</a></li>
-          <li class="nav-item"> <a class="nav-link" href="">Dropdowns</a></li>
-          <li class="nav-item"> <a class="nav-link" href="">Typography</a></li>
+          <li class="nav-item"> <a class="nav-link" href="./Attendance" onclick="event.preventDefault(); window.location.href='./Attendance';">Mark Attendance</a></li>
+          <li class="nav-item"> <a class="nav-link" href="./Attendance-Overview">Attendance Overview</a></li>
         </ul>
       </div>
     </li>
+
+    @* Form Elements *@
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
         <i class="menu-icon mdi mdi-card-text-outline"></i>
@@ -33,6 +38,8 @@
         </ul>
       </div>
     </li>
+
+    @* Charts *@
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
         <i class="menu-icon mdi mdi-chart-line"></i>
@@ -45,6 +52,8 @@
         </ul>
       </div>
     </li>
+
+    @* Tables *@
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
         <i class="menu-icon mdi mdi-table"></i>
@@ -57,6 +66,8 @@
         </ul>
       </div>
     </li>
+
+    @* Icons *@
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
         <i class="menu-icon mdi mdi-layers-outline"></i>
@@ -69,6 +80,8 @@
         </ul>
       </div>
     </li>
+
+    @* User pages *@
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
         <i class="menu-icon mdi mdi-account-circle-outline"></i>
@@ -85,6 +98,8 @@
         </ul>
       </div>
     </li>
+
+    @* Documentation *@
     <li class="nav-item">
       <a class="nav-link" href="">
         <i class="menu-icon mdi mdi-file-document"></i>
