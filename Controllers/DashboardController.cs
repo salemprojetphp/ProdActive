@@ -14,6 +14,7 @@ public class DashboardController : Controller
         _logger = logger;
     }
 
+    [Route("/Dashboard")]
     public IActionResult Index()
     {
         // if (User.Identity != null && User.Identity.IsAuthenticated)
