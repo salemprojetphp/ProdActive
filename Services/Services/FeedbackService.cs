@@ -30,6 +30,7 @@ namespace _.Services
         {
             var rating= await _sentimentAnalysisService.GetSentimentRating(feedback.Message);
             feedback.Rating = rating;
+            feedback.Date = System.DateTime.Now;
             await _feedbackRepository.AddAsync(feedback);
         }
 
