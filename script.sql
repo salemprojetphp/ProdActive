@@ -1,6 +1,6 @@
 -- Insert synthetic users into the AspNetUsers table
 -- Insert 25 synthetic users into the AspNetUsers table
-INSERT INTO [db_erp].[dbo].[AspNetUsers] 
+INSERT INTO AspNetUsers 
     (Id, UserName, NormalizedUserName, Email, NormalizedEmail, EmailConfirmed, 
      PasswordHash, SecurityStamp, ConcurrencyStamp, AccessFailedCount, 
      LockoutEnabled, TwoFactorEnabled, PhoneNumberConfirmed)
