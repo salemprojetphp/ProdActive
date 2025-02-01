@@ -24,6 +24,7 @@ builder.Services.AddScoped<IRepository<ProjectEmployee>, Repository<ProjectEmplo
 builder.Services.AddScoped<IRepository<ReunionParticipant>, Repository<ReunionParticipant>>();
 builder.Services.AddScoped<IRepository<Feedback>, Repository<Feedback>>();
 builder.Services.AddScoped<IRepository<Pointage>, Repository<Pointage>>();
+builder.Services.AddScoped<ProductivityML>();
 
 //SERVICES
 builder.Services.AddScoped<IUserService, UserService>();
