@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using _.Services;
 using _.Models;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class CalendarController : Controller
 {
     // private readonly IProjectService _projectService;
