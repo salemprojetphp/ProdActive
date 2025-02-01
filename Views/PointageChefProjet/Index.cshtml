@@ -1,11 +1,24 @@
-@model IEnumerable<_.Models.Pointage>
+@model _.Models.AttendanceOverviewViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Employee Attendance Overview";
 }
 
 @section Styles {
 }
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title text-danger mb-2">@Model.Project.Title</h1>
+                <p class="card-subtitle mb-0 text-muted" style="font-size: 1.1rem;">
+                    @Model.Project.Description
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
   <div class="col-sm-12">
@@ -16,23 +29,28 @@
             <div class="col-sm-12">
               <div class="statistics-details d-flex align-items-center justify-content-between">
                 <div>
-                  <p class="statistics-title">Pourcentage d'avancement du projet</p>
-                  <h3 class="rate-percentage">75%</h3>
+                  <p class="statistics-title">Employés sur le projet</p>
+                  <h3 class="rate-percentage">@Model.TotalEmployees</h3>
+                  <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+0</span></p>
+                </div>
+                <div>
+                  <p class="statistics-title">Avancement du projet</p>
+                  <h3 class="rate-percentage">@Model.ProjectCompletionPercentage.ToString("0.00")%</h3>
                   <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+5%</span></p>
                 </div>
                 <div>
-                  <p class="statistics-title">Durée restante estimée pour le projet</p>
-                  <h3 class="rate-percentage">15 jours</h3>
+                  <p class="statistics-title">Durée restante pour le projet</p>
+                  <h3 class="rate-percentage">@Model.RemainingDays jours</h3>
                   <p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-2 jours</span></p>
                 </div>
                 <div>
                   <p class="statistics-title">Taux de ponctualité</p>
-                  <h3 class="rate-percentage">85%</h3>
+                  <h3 class="rate-percentage">@Model.PunctualityRate.ToString("0.00")%</h3>
                   <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+3%</span></p>
                 </div>
                 <div class="d-none d-md-block">
                   <p class="statistics-title">Durée moyenne des pauses</p>
-                  <h3 class="rate-percentage">45 min</h3>
+                  <h3 class="rate-percentage">@Model.AverageBreakDuration.TotalMinutes.ToString("0") min</h3>
                   <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+10 min</span></p>
                 </div>
               </div>

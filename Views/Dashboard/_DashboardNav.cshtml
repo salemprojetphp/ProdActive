@@ -1,0 +1,84 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentPath = Context.Request.Path.Value.ToLower();
+}
+
+@section Styles {
+   <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="~/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" type="text/css" href="~/css/select.dataTables.min.css">
+    <!-- End plugin css for this page -->
+    @RenderSection("Styles", required: false)
+}
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="home-tab">
+      <div class="d-sm-flex align-items-center justify-content-between border-bottom">
+        <ul class="nav nav-tabs" >
+            <li class="nav-item">
+                <a class="nav-link ps-0 @(currentPath.Contains("employee") ? "active" : "")" 
+                id="Employee-tab" 
+                href="/Dashboard/Employee">
+                    Employees
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(currentPath.Contains("projects") ? "active" : "")" 
+                id="Projects-tab" 
+                href="/Dashboard/Projects" 
+                >
+                    Projects
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(currentPath.Contains("attendance") ? "active" : "")" 
+                id="Attendance-tab" 
+                href="/Dashboard/Attendance" 
+                >
+                    Attendance
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link border-0 @(currentPath == "/dashboard" ? "active" : "")" 
+                id="Feedbacks-tab" 
+                href="/Dashboard" 
+                >
+                    Feedbacks
+                </a>
+            </li>
+        </ul>
+        <div>
+          <div class="btn-wrapper">
+            <a href="#" class="btn btn-otline-dark align-items-center"><i class="icon-share"></i> Share</a>
+            <a href="#" class="btn btn-otline-dark"><i class="icon-printer"></i> Print</a>
+            <a href="#" class="btn btn-primary text-white me-0"><i class="icon-download"></i> Export</a>
+          </div>
+        </div>
+      </div>
+
+      @RenderBody()
+
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+    <!-- inject:js -->
+    <script src="~/js/Dashboard/off-canvas.js"></script>
+    <script src="~/js/Dashboard/template.js"></script>
+    <script src="~/js/Dashboard/settings.js"></script>
+    <script src="~/js/Dashboard/hoverable-collapse.js"></script>
+    <script src="~/js/Dashboard/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="~/js/Dashboard/jquery.cookie.js" type="text/javascript"></script>
+    <script src="~/js/Dashboard/dashboard.js"></script>
+    <script src="~/js/Dashboard/Chart.roundedBarCharts.js"></script> 
+    <!-- End custom js for this page-->
+    <!-- Plugin js for this page -->
+    <script src="~/vendors/chart.js/chart.umd.js"></script>
+    <script src="~/vendors/progressbar.js/progressbar.min.js"></script>
+    <!-- End plugin js for this page -->
+    @RenderSection("Scripts", required: false)
+}

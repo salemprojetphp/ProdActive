@@ -25,10 +25,44 @@ namespace Project_ERP.Controllers
         {
             // Write data to JSON file
             bool dataWritten = await WriteDataInJson();
+            var projectId = 2;
             if (dataWritten)
             {
-                var applicationDbContext = _context.Pointages.Include(p => p.Employee);
-                return View(await applicationDbContext.ToListAsync());
+                // Get the data from the database
+                var projectEmployeeIds = await _context.ProjectEmployees
+                    .Where(pe => pe.ProjectId == projectId)
+                    .Select(pe => pe.EmployeeId)
+                    .ToListAsync();
+                IEnumerable<Pointage> pointages = await _context.Pointages
+                    .Where(p => projectEmployeeIds.Contains(p.EmployeeId))
+                    .Include(p => p.Employee)
+                    .ToListAsync();
+                IEnumerable<Tache> tasks = await _context.Tasks
+                    .Where(t => t.ProjectId == projectId) // Directly filter by ProjectId
+                    .ToListAsync();
+                var project = await _context.Projects
+                    .Include(p => p.Tasks) // Ensure Tasks are included
+                    .FirstOrDefaultAsync(p => p.Id == projectId);
+
+                // Use the helper methods to calculate the statistics
+                var projectCompletionPercentage = ProjectOverviewHelper.CalculateProjectCompletionPercentage(tasks);
+                var remainingDays = ProjectOverviewHelper.CalculateRemainingDays(project);
+                var punctualityRate = ProjectOverviewHelper.CalculatePunctualityRate(pointages);
+                var averageBreakDuration = ProjectOverviewHelper.CalculateAverageBreakDuration(pointages);
+
+                // Create the ViewModel with the calculated data
+                var viewModel = new AttendanceOverviewViewModel
+                {
+                    Pointages = pointages,
+                    Project = project,
+                    ProjectCompletionPercentage = projectCompletionPercentage,
+                    RemainingDays = remainingDays,
+                    PunctualityRate = punctualityRate,
+                    AverageBreakDuration = averageBreakDuration,
+                    TotalEmployees = projectEmployeeIds.Count
+                };
+
+                return View(viewModel);
             }
             else
             {
@@ -40,7 +74,7 @@ namespace Project_ERP.Controllers
         {
             try
             {
-                var projectId = 1; 
+                var projectId = 2; 
                 var daysOfWeek = new List<string> { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
                 var hoursOfDay = new List<string> { "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00" };
                 
