@@ -209,15 +209,15 @@
                           <p class="card-subtitle card-subtitle-dash">to BE DETERMINED</p>
                         </div>
                         <div>
-                          <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button"><i class="mdi mdi-account-plus"></i>Add new member</button>
+                          <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button"><i class="mdi mdi-account-plus"></i>Filter Feedback</button>
                         </div>
                       </div>
-                      <div class="table-responsive  mt-1">
-                        <table class="table select-table" id="feedbackTable" style="max-height: 500px; overflow-y: auto;">
+                      <div class="table-responsive  mt-1"style="max-height: 400px; overflow-y: auto;">
+                        <table class="table select-table" id="feedbackTable">
                             <thead>
                                 <tr>
                                     <th>Subject</th>
-                                    <th>FeedbacK</th>
+                                    <th style="width: 50px word-wrap: break-word;">FeedbacK</th>
                                     <th>Date</th>
                                     <th>Rating</th>
                                 </tr>
@@ -602,7 +602,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="width: 50px">
                                     <h6>${feedback.message}</h6>
                                 </td>
                                 <td>${formattedDate}</td>
