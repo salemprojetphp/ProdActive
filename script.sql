@@ -1534,3 +1534,150 @@ VALUES
   ('Problem-Solving', 'The employee showed solid problem-solving skills, but missed a few key details.', 1),
   ('Work Quality', 'Work quality was inconsistent, with some tasks completed well, and others poorly.', 0),
   ('Teamwork', 'There was strong teamwork, but a few members struggled to engage fully.', 1);
+
+-- Insert 10 tasks for Project 1
+INSERT INTO Tasks (Title, Description, Status, Importance, DateDebut, DateFin, Expected_duree, ProjectId, EmployeeId)
+VALUES 
+('Design UI', 'Create the UI/UX for the dashboard', 0, 3, '2024-02-01', '2024-02-10', 10, 1, (SELECT Id FROM AspNetUsers WHERE UserName = 'user1')),
+('Database Schema', 'Define the database tables and relationships', 1, 5, '2024-01-25', '2024-02-02', 8, 1, (SELECT Id FROM AspNetUsers WHERE UserName = 'user2')),
+('Backend API', 'Develop the backend endpoints', -1, 4, '2024-02-05', '2024-02-15', 10, 1, (SELECT Id FROM AspNetUsers WHERE UserName = 'user3')),
+('Testing Suite', 'Create unit and integration tests', 0, 4, '2024-02-07', '2024-02-14', 7, 1, (SELECT Id FROM AspNetUsers WHERE UserName = 'user4')),
+('User Authentication', 'Implement login and registration', 1, 5, '2024-02-03', '2024-02-06', 3, 1, (SELECT Id FROM AspNetUsers WHERE UserName = 'user5')),
+('Dashboard Analytics', 'Implement charts for analytics', -1, 3, '2024-02-08', '2024-02-12', 4, 1, (SELECT Id FROM AspNetUsers WHERE UserName = 'user6')),
+('Email Notifications', 'Configure email alerts and reports', 0, 2, '2024-02-09', '2024-02-13', 4, 1, (SELECT Id FROM AspNetUsers WHERE UserName = 'user7')),
+('Mobile Responsiveness', 'Ensure the UI is mobile-friendly', 1, 3, '2024-02-05', '2024-02-09', 4, 1, (SELECT Id FROM AspNetUsers WHERE UserName = 'user8')),
+('Data Backup Strategy', 'Develop automatic database backups', -1, 4, '2024-02-11', '2024-02-16', 5, 1, (SELECT Id FROM AspNetUsers WHERE UserName = 'user9')),
+('Security Hardening', 'Implement security best practices', 0, 5, '2024-02-13', '2024-02-18', 5, 1, (SELECT Id FROM AspNetUsers WHERE UserName = 'user10'));
+
+-- Insert 10 tasks for Project 2
+INSERT INTO Tasks (Title, Description, Status, Importance, DateDebut, DateFin, Expected_duree, ProjectId, EmployeeId)
+VALUES 
+('Frontend Integration', 'Connect UI with backend services', 0, 4, '2024-02-10', '2024-02-18', 8, 2, (SELECT Id FROM AspNetUsers WHERE UserName = 'user11')),
+('Authentication Module', 'Implement JWT authentication', 1, 5, '2024-02-02', '2024-02-08', 6, 2, (SELECT Id FROM AspNetUsers WHERE UserName = 'user12')),
+('Performance Optimization', 'Optimize database queries and API calls', -1, 3, '2024-02-12', '2024-02-20', 8, 2, (SELECT Id FROM AspNetUsers WHERE UserName = 'user13')),
+('Logging System', 'Set up error logging and monitoring', 0, 4, '2024-02-05', '2024-02-10', 5, 2, (SELECT Id FROM AspNetUsers WHERE UserName = 'user14')),
+('Data Migration', 'Migrate old data to the new system', 1, 5, '2024-02-06', '2024-02-12', 6, 2, (SELECT Id FROM AspNetUsers WHERE UserName = 'user15')),
+('Search Functionality', 'Implement search and filters', -1, 3, '2024-02-08', '2024-02-14', 6, 2, (SELECT Id FROM AspNetUsers WHERE UserName = 'user16')),
+('Role-Based Access', 'Configure user roles and permissions', 0, 2, '2024-02-07', '2024-02-11', 4, 2, (SELECT Id FROM AspNetUsers WHERE UserName = 'user17')),
+('API Documentation', 'Generate API docs using Swagger', 1, 3, '2024-02-09', '2024-02-13', 4, 2, (SELECT Id FROM AspNetUsers WHERE UserName = 'user18')),
+('Automated Reports', 'Create scheduled reports generation', -1, 4, '2024-02-11', '2024-02-15', 4, 2, (SELECT Id FROM AspNetUsers WHERE UserName = 'user19')),
+('Server Setup', 'Deploy app on a cloud server', 0, 5, '2024-02-14', '2024-02-20', 6, 2, (SELECT Id FROM AspNetUsers WHERE UserName = 'user20'));
+
+-- Insert 10 tasks for Project 3
+INSERT INTO Tasks (Title, Description, Status, Importance, DateDebut, DateFin, Expected_duree, ProjectId, EmployeeId)
+VALUES 
+('User Dashboard', 'Create personalized dashboards', 0, 4, '2024-02-15', '2024-02-22', 7, 3, (SELECT Id FROM AspNetUsers WHERE UserName = 'user21')),
+('Multi-Language Support', 'Add localization and translations', 1, 5, '2024-02-10', '2024-02-16', 6, 3, (SELECT Id FROM AspNetUsers WHERE UserName = 'user22')),
+('Payment Gateway', 'Integrate Stripe for payments', -1, 3, '2024-02-08', '2024-02-14', 6, 3, (SELECT Id FROM AspNetUsers WHERE UserName = 'user23')),
+('Bug Fixing', 'Resolve known bugs before launch', 0, 4, '2024-02-12', '2024-02-18', 6, 3, (SELECT Id FROM AspNetUsers WHERE UserName = 'user24')),
+('AI Chatbot', 'Develop AI-driven chatbot', 1, 5, '2024-02-05', '2024-02-10', 5, 3, (SELECT Id FROM AspNetUsers WHERE UserName = 'user25')),
+('Feedback System', 'Create a user feedback collection module', -1, 3, '2024-02-07', '2024-02-13', 6, 3, (SELECT Id FROM AspNetUsers WHERE UserName = 'user1')),
+('Mobile App Sync', 'Sync web and mobile app data', 0, 2, '2024-02-09', '2024-02-14', 5, 3, (SELECT Id FROM AspNetUsers WHERE UserName = 'user2')),
+('Marketing Dashboard', 'Track marketing KPIs', 1, 3, '2024-02-06', '2024-02-10', 4, 3, (SELECT Id FROM AspNetUsers WHERE UserName = 'user3')),
+('API Security', 'Enhance security with OAuth', -1, 4, '2024-02-11', '2024-02-16', 5, 3, (SELECT Id FROM AspNetUsers WHERE UserName = 'user4')),
+('Continuous Deployment', 'Automate deployment pipelines', 0, 5, '2024-02-14', '2024-02-20', 6, 3, (SELECT Id FROM AspNetUsers WHERE UserName = 'user5'));
+
+-- Insert 8 tasks for Project 4
+INSERT INTO Tasks (Title, Description, Status, Importance, DateDebut, DateFin, Expected_duree, ProjectId, EmployeeId)
+VALUES 
+('Requirement Analysis', 'Gather and document requirements', 0, 4, '2024-02-01', '2024-02-05', 5, 4, (SELECT Id FROM AspNetUsers WHERE UserName = 'user6')),
+('Wireframing', 'Create wireframes for the application', 1, 3, '2024-02-03', '2024-02-07', 4, 4, (SELECT Id FROM AspNetUsers WHERE UserName = 'user7')),
+('Database Design', 'Model database schema', -1, 5, '2024-02-05', '2024-02-10', 6, 4, (SELECT Id FROM AspNetUsers WHERE UserName = 'user8')),
+('Middleware Setup', 'Set up authentication and logging', 0, 4, '2024-02-06', '2024-02-12', 6, 4, (SELECT Id FROM AspNetUsers WHERE UserName = 'user9')),
+('UX Enhancements', 'Improve user experience', 1, 3, '2024-02-08', '2024-02-14', 5, 4, (SELECT Id FROM AspNetUsers WHERE UserName = 'user10')),
+('API Rate Limiting', 'Implement rate limiting for APIs', -1, 4, '2024-02-10', '2024-02-15', 5, 4, (SELECT Id FROM AspNetUsers WHERE UserName = 'user11')),
+('Admin Dashboard', 'Develop admin functionalities', 0, 5, '2024-02-12', '2024-02-17', 6, 4, (SELECT Id FROM AspNetUsers WHERE UserName = 'user12')),
+('Security Audit', 'Conduct a security assessment', 1, 5, '2024-02-15', '2024-02-20', 5, 4, (SELECT Id FROM AspNetUsers WHERE UserName = 'user13'));
+
+-- Insert 8 tasks for Project 5
+INSERT INTO Tasks (Title, Description, Status, Importance, DateDebut, DateFin, Expected_duree, ProjectId, EmployeeId)
+VALUES 
+('Feature Roadmap', 'Plan new features', 0, 4, '2024-02-02', '2024-02-06', 4, 5, (SELECT Id FROM AspNetUsers WHERE UserName = 'user14')),
+('User Registration', 'Develop signup and verification', 1, 5, '2024-02-04', '2024-02-08', 4, 5, (SELECT Id FROM AspNetUsers WHERE UserName = 'user15')),
+('Data Encryption', 'Secure sensitive user data', -1, 4, '2024-02-06', '2024-02-11', 5, 5, (SELECT Id FROM AspNetUsers WHERE UserName = 'user16')),
+('Performance Benchmarking', 'Measure and optimize speed', 0, 3, '2024-02-07', '2024-02-13', 5, 5, (SELECT Id FROM AspNetUsers WHERE UserName = 'user17')),
+('Graphical Reports', 'Implement dynamic reporting', 1, 3, '2024-02-09', '2024-02-14', 5, 5, (SELECT Id FROM AspNetUsers WHERE UserName = 'user18')),
+('Real-Time Updates', 'Enable real-time data refresh', -1, 4, '2024-02-11', '2024-02-16', 5, 5, (SELECT Id FROM AspNetUsers WHERE UserName = 'user19')),
+('OAuth Integration', 'Integrate third-party logins', 0, 5, '2024-02-13', '2024-02-19', 6, 5, (SELECT Id FROM AspNetUsers WHERE UserName = 'user20')),
+('CI/CD Pipeline', 'Automate deployment workflows', 1, 5, '2024-02-15', '2024-02-22', 6, 5, (SELECT Id FROM AspNetUsers WHERE UserName = 'user21'));
+
+-- Insert 8 tasks for Project 6
+INSERT INTO Tasks (Title, Description, Status, Importance, DateDebut, DateFin, Expected_duree, ProjectId, EmployeeId)
+VALUES 
+('Load Testing', 'Test system under heavy load', 0, 5, '2024-02-03', '2024-02-08', 6, 6, (SELECT Id FROM AspNetUsers WHERE UserName = 'user22')),
+('Dark Mode Support', 'Implement dark/light theme toggle', 1, 3, '2024-02-05', '2024-02-10', 5, 6, (SELECT Id FROM AspNetUsers WHERE UserName = 'user23')),
+('Payment Subscription', 'Handle recurring billing', -1, 5, '2024-02-07', '2024-02-12', 6, 6, (SELECT Id FROM AspNetUsers WHERE UserName = 'user24')),
+('SEO Optimization', 'Improve search engine ranking', 0, 3, '2024-02-08', '2024-02-14', 5, 6, (SELECT Id FROM AspNetUsers WHERE UserName = 'user25')),
+('AI Recommendation Engine', 'Suggest content based on behavior', 1, 4, '2024-02-10', '2024-02-15', 5, 6, (SELECT Id FROM AspNetUsers WHERE UserName = 'user1')),
+('Kubernetes Deployment', 'Deploy using Kubernetes', -1, 5, '2024-02-12', '2024-02-17', 6, 6, (SELECT Id FROM AspNetUsers WHERE UserName = 'user2')),
+('Push Notifications', 'Implement mobile/web notifications', 0, 3, '2024-02-14', '2024-02-19', 5, 6, (SELECT Id FROM AspNetUsers WHERE UserName = 'user3')),
+('Blockchain Integration', 'Implement smart contracts', 1, 5, '2024-02-16', '2024-02-21', 6, 6, (SELECT Id FROM AspNetUsers WHERE UserName = 'user4'));
+
+  -- Insert 5 tasks for Project 7
+INSERT INTO Tasks (Title, Description, Status, Importance, DateDebut, DateFin, Expected_duree, ProjectId, EmployeeId)
+VALUES 
+('Code Refactoring', 'Improve code structure and readability', 0, 3, '2024-02-05', '2024-02-10', 4, 7, (SELECT Id FROM AspNetUsers WHERE UserName = 'user5')),
+('Unit Testing', 'Write automated tests', 1, 4, '2024-02-07', '2024-02-12', 5, 7, (SELECT Id FROM AspNetUsers WHERE UserName = 'user6')),
+('Bug Fixing', 'Resolve reported issues', -1, 5, '2024-02-09', '2024-02-14', 6, 7, (SELECT Id FROM AspNetUsers WHERE UserName = 'user7')),
+('Database Optimization', 'Improve query performance', 0, 4, '2024-02-11', '2024-02-16', 5, 7, (SELECT Id FROM AspNetUsers WHERE UserName = 'user8')),
+('User Onboarding Flow', 'Enhance new user experience', 1, 3, '2024-02-13', '2024-02-18', 4, 7, (SELECT Id FROM AspNetUsers WHERE UserName = 'user9'));
+
+-- Insert 5 tasks for Project 8
+INSERT INTO Tasks (Title, Description, Status, Importance, DateDebut, DateFin, Expected_duree, ProjectId, EmployeeId)
+VALUES 
+('Backend Scaling', 'Optimize backend services for scalability', 0, 5, '2024-02-06', '2024-02-11', 6, 8, (SELECT Id FROM AspNetUsers WHERE UserName = 'user10')),
+('AI Chatbot', 'Develop AI-based chatbot support', 1, 4, '2024-02-08', '2024-02-13', 5, 8, (SELECT Id FROM AspNetUsers WHERE UserName = 'user11')),
+('Frontend Performance', 'Optimize frontend assets for speed', -1, 3, '2024-02-10', '2024-02-15', 4, 8, (SELECT Id FROM AspNetUsers WHERE UserName = 'user12')),
+('Multi-language Support', 'Implement multi-language options', 0, 4, '2024-02-12', '2024-02-17', 5, 8, (SELECT Id FROM AspNetUsers WHERE UserName = 'user13')),
+('Security Patching', 'Fix security vulnerabilities', 1, 5, '2024-02-14', '2024-02-19', 6, 8, (SELECT Id FROM AspNetUsers WHERE UserName = 'user14'));
+
+-- Insert 5 tasks for Project 9
+INSERT INTO Tasks (Title, Description, Status, Importance, DateDebut, DateFin, Expected_duree, ProjectId, EmployeeId)
+VALUES 
+('Cloud Migration', 'Migrate services to cloud infrastructure', 0, 5, '2024-02-07', '2024-02-12', 6, 9, (SELECT Id FROM AspNetUsers WHERE UserName = 'user15')),
+('Accessibility Testing', 'Ensure app meets accessibility standards', 1, 3, '2024-02-09', '2024-02-14', 4, 9, (SELECT Id FROM AspNetUsers WHERE UserName = 'user16')),
+('Log Monitoring', 'Set up real-time logging system', -1, 4, '2024-02-11', '2024-02-16', 5, 9, (SELECT Id FROM AspNetUsers WHERE UserName = 'user17')),
+('Dark Mode Feature', 'Enable dark mode in UI', 0, 3, '2024-02-13', '2024-02-18', 4, 9, (SELECT Id FROM AspNetUsers WHERE UserName = 'user18')),
+('Automated Backups', 'Set up automatic backups for data', 1, 5, '2024-02-15', '2024-02-20', 6, 9, (SELECT Id FROM AspNetUsers WHERE UserName = 'user19'));
+
+-- Insert 10 tasks for Project 10
+INSERT INTO Tasks (Title, Description, Status, Importance, DateDebut, DateFin, Expected_duree, ProjectId, EmployeeId)
+VALUES 
+('API Development', 'Develop RESTful APIs for the app', 0, 4, '2024-02-06', '2024-02-11', 6, 10, (SELECT Id FROM AspNetUsers WHERE UserName = 'user1')),
+('Database Indexing', 'Optimize DB performance with indexing', 1, 5, '2024-02-07', '2024-02-12', 5, 10, (SELECT Id FROM AspNetUsers WHERE UserName = 'user2')),
+('Mobile UI Design', 'Improve mobile user interface', -1, 3, '2024-02-08', '2024-02-13', 4, 10, (SELECT Id FROM AspNetUsers WHERE UserName = 'user3')),
+('OAuth Integration', 'Implement OAuth for authentication', 0, 4, '2024-02-09', '2024-02-14', 5, 10, (SELECT Id FROM AspNetUsers WHERE UserName = 'user4')),
+('Bug Tracking', 'Identify and resolve software bugs', 1, 3, '2024-02-10', '2024-02-15', 4, 10, (SELECT Id FROM AspNetUsers WHERE UserName = 'user5')),
+('AI Model Training', 'Train AI models for prediction', 0, 5, '2024-02-11', '2024-02-16', 6, 10, (SELECT Id FROM AspNetUsers WHERE UserName = 'user6')),
+('Load Testing', 'Analyze system performance under load', -1, 4, '2024-02-12', '2024-02-17', 5, 10, (SELECT Id FROM AspNetUsers WHERE UserName = 'user7')),
+('Dark Mode Enhancement', 'Improve dark mode visuals', 1, 3, '2024-02-13', '2024-02-18', 4, 10, (SELECT Id FROM AspNetUsers WHERE UserName = 'user8')),
+('Data Encryption', 'Ensure data security via encryption', 0, 5, '2024-02-14', '2024-02-19', 6, 10, (SELECT Id FROM AspNetUsers WHERE UserName = 'user9')),
+('Automated Reports', 'Set up automated reporting system', 1, 4, '2024-02-15', '2024-02-20', 5, 10, (SELECT Id FROM AspNetUsers WHERE UserName = 'user10'));
+
+-- Insert 10 tasks for Project 11
+INSERT INTO Tasks (Title, Description, Status, Importance, DateDebut, DateFin, Expected_duree, ProjectId, EmployeeId)
+VALUES 
+('DevOps Pipeline', 'Implement CI/CD pipeline', 0, 5, '2024-02-06', '2024-02-11', 6, 11, (SELECT Id FROM AspNetUsers WHERE UserName = 'user11')),
+('GraphQL API', 'Implement GraphQL endpoints', 1, 4, '2024-02-07', '2024-02-12', 5, 11, (SELECT Id FROM AspNetUsers WHERE UserName = 'user12')),
+('Server Migration', 'Move servers to new infrastructure', -1, 3, '2024-02-08', '2024-02-13', 4, 11, (SELECT Id FROM AspNetUsers WHERE UserName = 'user13')),
+('Security Audit', 'Conduct full security assessment', 0, 4, '2024-02-09', '2024-02-14', 5, 11, (SELECT Id FROM AspNetUsers WHERE UserName = 'user14')),
+('Voice Recognition', 'Integrate voice-based commands', 1, 3, '2024-02-10', '2024-02-15', 4, 11, (SELECT Id FROM AspNetUsers WHERE UserName = 'user15')),
+('Data Backup Automation', 'Automate backup processes', 0, 5, '2024-02-11', '2024-02-16', 6, 11, (SELECT Id FROM AspNetUsers WHERE UserName = 'user16')),
+('Customer Dashboard', 'Enhance analytics dashboard', -1, 4, '2024-02-12', '2024-02-17', 5, 11, (SELECT Id FROM AspNetUsers WHERE UserName = 'user17')),
+('Push Notifications', 'Implement push notifications', 1, 3, '2024-02-13', '2024-02-18', 4, 11, (SELECT Id FROM AspNetUsers WHERE UserName = 'user18')),
+('Automated Testing', 'Set up Cypress & Jest testing', 0, 5, '2024-02-14', '2024-02-19', 6, 11, (SELECT Id FROM AspNetUsers WHERE UserName = 'user19')),
+('User Surveys', 'Collect user feedback for improvements', 1, 4, '2024-02-15', '2024-02-20', 5, 11, (SELECT Id FROM AspNetUsers WHERE UserName = 'user20'));
+
+-- Insert 10 tasks for Project 12
+INSERT INTO Tasks (Title, Description, Status, Importance, DateDebut, DateFin, Expected_duree, ProjectId, EmployeeId)
+VALUES 
+('UI Overhaul', 'Redesign UI/UX for better usability', 0, 4, '2024-02-06', '2024-02-11', 6, 12, (SELECT Id FROM AspNetUsers WHERE UserName = 'user21')),
+('Blockchain Integration', 'Add blockchain-based authentication', 1, 5, '2024-02-07', '2024-02-12', 5, 12, (SELECT Id FROM AspNetUsers WHERE UserName = 'user22')),
+('Data Science Dashboard', 'Create analytics dashboard', -1, 3, '2024-02-08', '2024-02-13', 4, 12, (SELECT Id FROM AspNetUsers WHERE UserName = 'user23')),
+('User Role Management', 'Improve role-based access control', 0, 4, '2024-02-09', '2024-02-14', 5, 12, (SELECT Id FROM AspNetUsers WHERE UserName = 'user24')),
+('Feature Toggle System', 'Implement A/B testing toggles', 1, 3, '2024-02-10', '2024-02-15', 4, 12, (SELECT Id FROM AspNetUsers WHERE UserName = 'user25')),
+('Performance Benchmarking', 'Analyze app performance bottlenecks', 0, 5, '2024-02-11', '2024-02-16', 6, 12, (SELECT Id FROM AspNetUsers WHERE UserName = 'user1')),
+('Automated Data Sync', 'Sync data across services', -1, 4, '2024-02-12', '2024-02-17', 5, 12, (SELECT Id FROM AspNetUsers WHERE UserName = 'user2')),
+('Multi-Tenancy Support', 'Enable multiple client management', 1, 3, '2024-02-13', '2024-02-18', 4, 12, (SELECT Id FROM AspNetUsers WHERE UserName = 'user3')),
+('Bug Bounty Program', 'Launch bug bounty for security testing', 0, 5, '2024-02-14', '2024-02-19', 6, 12, (SELECT Id FROM AspNetUsers WHERE UserName = 'user4')),
+('Gamification Features', 'Add badges & rewards system', 1, 4, '2024-02-15', '2024-02-20', 5, 12, (SELECT Id FROM AspNetUsers WHERE UserName = 'user5'));
