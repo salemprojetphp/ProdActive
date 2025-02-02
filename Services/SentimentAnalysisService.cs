@@ -23,7 +23,7 @@ public class SentimentAnalysisService
 
         var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync("http://localhost:5000/predict", content);  // Adjust URL as necessary
+        var response = await _httpClient.PostAsync("http://localhost:5000/sentiment", content);  // Adjust URL as necessary
 
         if (response.IsSuccessStatusCode)
         {
