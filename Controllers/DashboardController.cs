@@ -8,7 +8,9 @@ using _.Models;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class DashboardController : Controller
 {
     private readonly ILogger<DashboardController> _logger;
@@ -48,17 +50,47 @@ public class DashboardController : Controller
         var managerIds = await _context.Projects.Select(p => p.ManagerId).ToListAsync();
 
         // Get all active employees
-        var totalActiveEmployees = projectEmployeeIds.Concat(managerIds).Distinct().Count();
+        var activeEmployeesIds = projectEmployeeIds.Union(managerIds);
 
+        // Get all tasks per employee with the project active
+        Dictionary<ApplicationUser, IEnumerable<Tache>> TasksPerEmployee = new Dictionary<ApplicationUser, IEnumerable<Tache>>();
+        foreach (var employeeId in activeEmployeesIds)
+        {
+            var tasks = await _context.Tasks
+                .Where(t => t.EmployeeId == employeeId && projectIds.Contains(t.ProjectId))
+                .ToListAsync();
+
+            var employee = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == employeeId);
+
+            if (employee != null)
+            {
+                TasksPerEmployee.Add(employee, tasks);
+            }
+        }
+        Dictionary<string, double> completionRatePerEmployee = DashboardHelper.GetCompletionRateDict(TasksPerEmployee);
+        await DashboardHelper.WriteTaskCompletionRateAsync(completionRatePerEmployee);
+        await DashboardHelper.WriteAverageTaskDurationAsync(TasksPerEmployee);
+
+        var FinishedTasks = await _context.Tasks
+            .Where(t => projectIds.Contains(t.ProjectId))
+            .ToListAsync();
+        await DashboardHelper.WriteProjectProgressByImportanceAsync(FinishedTasks);
+
+        // Get the top 3 performers
+        Dictionary<ApplicationUser, double> topPerformersRates = completionRatePerEmployee
+            .OrderByDescending(kvp => kvp.Value)
+            .Take(3)
+            .ToDictionary(kvp => TasksPerEmployee.Keys.FirstOrDefault(u => u.UserName == kvp.Key), kvp => kvp.Value);
+
+        // Pass Data to the view 
         EmployeeDashboardViewModel employeeDashboardVM = new EmployeeDashboardViewModel
         {
-            TotalActiveEmployees = totalActiveEmployees,
-            TotalActiveProjects = projectIds.Count,
-            // TasksCompleted = new List<EmployeeChartData>(),
-            // CompletionRates = new List<EmployeeChartData>(),
-            // AverageDurations = new List<EmployeeChartData>(),
-            // ImportanceDurations = new List<ImportanceChartData>()
+            TotalActiveEmployees = activeEmployeesIds.Count(),
+            TotalActiveProjects = projectIds.Count(),
+            topPerformersRates = topPerformersRates,
         };
+
         return View(employeeDashboardVM);
     }
 
@@ -219,6 +251,71 @@ public class DashboardController : Controller
 
     return View(attendanceDashboardVM);
 }
+
+    [Route("/Dashboard/Feedbacks")]
+    public async Task<IActionResult> Feedbacks()
+    {
+        // Calculate the counts for positive and negative feedbacks
+        var feedbackCounts = await _context.Feedbacks
+            .GroupBy(f => f.Rating)
+            .Select(g => new
+            {
+                Rating = g.Key,
+                Count = g.Count()
+            })
+            .ToListAsync();
+
+        var negativeFeedbacks = feedbackCounts.FirstOrDefault(f => f.Rating == 0)?.Count ?? 0;
+        var positiveFeedbacks = feedbackCounts.FirstOrDefault(f => f.Rating == 1)?.Count ?? 0;
+
+        // Calculate the total number of feedbacks
+        var totalFeedbacks = await _context.Feedbacks.CountAsync();
+
+        // Create the ViewModel and pass it to the view
+        var feedbackDashboardVM = new FeedbackDashboardViewModel
+        {
+            NegativeFeedbacks = negativeFeedbacks,
+            PositiveFeedbacks = positiveFeedbacks,
+            TotalFeedbacks = totalFeedbacks
+        };
+
+        return View(feedbackDashboardVM);  
+    }
+
+    [Route("/Dashboard/FeedbacksData")]
+    public async Task<IActionResult> GetFeedbackData()
+    {
+        // Retrieve all feedback data for the current week from the database
+        var feedbackData = await _context.Feedbacks.ToListAsync();
+
+        // Pass the data to the helper to get the feedback counts for the current week
+        var currentWeekFeedbacks = FeedbackHelper.GetFeedbackCountsForCurrentWeek(feedbackData);
+
+        // Return the data as JSON to be used in the chart
+        return Json(new
+        {
+            currentWeekPositive = currentWeekFeedbacks.PositiveFeedbacks,
+            currentWeekNegative = currentWeekFeedbacks.NegativeFeedbacks,
+        });
+    }
+
+    [Route("/Dashboard/FeedbackPercentages")]
+    public async Task<IActionResult> GetFeedbackPercentages()
+    {
+        // Retrieve all feedback data from the database
+        var feedbackData = await _context.Feedbacks.ToListAsync();
+
+        // Use the helper method to calculate the percentages of positive and negative feedbacks
+        var (positivePercentage, negativePercentage) = FeedbackHelper.GetFeedbackPercentages(feedbackData);
+
+        // Return the percentages as JSON
+        return Json(new
+        {
+            positivePercentage = positivePercentage,
+            negativePercentage = negativePercentage
+        });
+    }
+
 
     private async Task WriteChartDataToJson(object data)
     {

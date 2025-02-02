@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using _.Models;
 using _.Services;
 using _.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Project_ERP.Controllers
 {
+    [Authorize]
     public class PointageEmployeeController : Controller
     {
         private readonly IPointageService _pointageService;

@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using _.Models;
 using _.Services;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace _.Controllers;
 
-
+[Authorize]
 public class FeedbackController : Controller
 {
     private readonly IFeedbackService _feedbackService;

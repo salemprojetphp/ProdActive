@@ -44,80 +44,6 @@
     <div class="row">
       <div class="col-lg-8 d-flex flex-column">
         <div class="row flex-grow">
-          <div class="col-12 col-lg-4 col-lg-12 grid-margin stretch-card">
-            <div class="card card-rounded">
-              <div class="card-body">
-                <div class="d-sm-flex justify-content-between align-items-start">
-                  <div>
-                    <h4 class="card-title card-title-dash">Performance Line Chart</h4>
-                    <h5 class="card-subtitle card-subtitle-dash">Lorem Ipsum is simply dummy text of the printing</h5>
-                  </div>
-                  <div id="performanceLine-legend"></div>
-                </div>
-                <div class="chartjs-wrapper mt-4">
-                  <canvas id="performanceLine" width=""></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 d-flex flex-column">
-        <div class="row flex-grow">
-          <div class="col-md-6 col-lg-12 grid-margin stretch-card">
-            <div class="card bg-primary card-rounded">
-              <div class="card-body pb-0">
-                <h4 class="card-title card-title-dash text-white mb-4">Status Summary</h4>
-                <div class="row">
-                  <div class="col-sm-4">
-                    <p class="status-summary-ight-white mb-1">Closed Value</p>
-                    <h2 class="text-info">357</h2>
-                  </div>
-                  <div class="col-sm-8">
-                    <div class="status-summary-chart-wrapper pb-4">
-                      <canvas id="status-summary"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-12 grid-margin stretch-card">
-            <div class="card card-rounded">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-lg-6">
-                    <div class="d-flex justify-content-between align-items-center mb-2 mb-sm-0">
-                      <div class="circle-progress-width">
-                        <div id="totalVisitors" class="progressbar-js-circle pr-2"></div>
-                      </div>
-                      <div>
-                        <p class="text-small mb-2">Total Visitors</p>
-                        <h4 class="mb-0 fw-bold">26.80%</h4>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-6">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div class="circle-progress-width">
-                        <div id="visitperday" class="progressbar-js-circle pr-2"></div>
-                      </div>
-                      <div>
-                        <p class="text-small mb-2">Visits per day</p>
-                        <h4 class="mb-0 fw-bold">9065</h4>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-8 d-flex flex-column">
-        <div class="row flex-grow">
           <div class="col-12 grid-margin stretch-card">
             <div class="card card-rounded">
               <div class="card-body">
@@ -164,38 +90,6 @@
                 <div class="col-sm-8">
                   <h3 class="text-white upgrade-info mb-0"> Enhance your <span class="fw-bold">Campaign</span> for better outreach </h3>
                   <a href="#" class="btn btn-info upgrade-btn">Upgrade Account!</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row flex-grow">
-          <div class="col-12 grid-margin stretch-card">
-            <div class="card card-rounded">
-              <div class="card-body">
-                <div class="d-sm-flex justify-content-between align-items-start">
-                  <div>
-                    <h4 class="card-title card-title-dash">Feedback Overview</h4>
-                    <p class="card-subtitle card-subtitle-dash">to BE DETERMINED</p>
-                  </div>
-                  <div>
-                    <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button"><i class="mdi mdi-account-plus"></i>Filter Feedback</button>
-                  </div>
-                </div>
-                <div class="table-responsive  mt-1"style="max-height: 400px; overflow-y: auto;">
-                  <table class="table select-table" id="feedbackTable">
-                      <thead>
-                          <tr>
-                              <th>Subject</th>
-                              <th style="width: 50px word-wrap: break-word;">FeedbacK</th>
-                              <th>Date</th>
-                              <th>Rating</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <!-- Table rows will be dynamically generated here -->
-                      </tbody>
-                  </table>
                 </div>
               </div>
             </div>
@@ -517,68 +411,4 @@
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-        // Cache the tbody element to avoid repeated DOM lookups
-        var tbody = $('#feedbackTable tbody');
-        
-        // Clear any existing rows before appending new ones
-        tbody.empty();
-
-        // Fetch feedback data from the API
-        $.ajax({
-            url: 'Feedback/GetAllFeedbacks', // API endpoint
-            method: 'GET',
-            success: function (data) {
-                if (data && data.length > 0) {
-                    // Generate table rows dynamically
-                    var rows = data.map(function (feedback) {
-                        // Format date for better readability
-                        var formattedDate = new Date(feedback.date).toLocaleDateString();
-
-                        // Determine the thumbs-up or thumbs-down based on rating
-                        var thumbsIcon = '';
-                        if (feedback.rating === 1) {
-                            thumbsIcon = '<i class="fas fa-thumbs-up fa-2x" style="color: grey;"></i>'; // Thumbs-up icon (green)
-                        } else if (feedback.rating === 0) {
-                            thumbsIcon = '<i class="fas fa-thumbs-down fa-2x" style="color: grey;"></i>'; // Thumbs-down icon (red)
-                        }
-
-                        // Create a row for each feedback
-                        return `
-                            <tr>
-                                <td>
-                                    <div class="d-flex">
-                                        <div>
-                                            <h6>${feedback.subject}</h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td style="width: 50px">
-                                    <h6>${feedback.message}</h6>
-                                </td>
-                                <td>${formattedDate}</td>
-                                <td>
-                                    <div class="thumb-container" style="display: flex; justify-content: center;">
-                                        <span>${thumbsIcon}</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
-                    }).join(""); // Combine all rows into a single string
-
-                    // Append the generated rows to the table body
-                    tbody.append(rows);
-                } else {
-                    // If no feedback data is found, display a message
-                    tbody.append('<tr><td colspan="5" class="text-center">No feedback available.</td></tr>');
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error fetching feedback:', error);
-                alert("There was an error fetching the feedback data. Please try again later.");
-            }
-        });
-    });
-    </script>
 }

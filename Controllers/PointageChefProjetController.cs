@@ -8,9 +8,11 @@ using _.Models;
 using System.Text.Json;
 using System.IO;
 using _.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Project_ERP.Controllers
 {
+    [Authorize]
     public class PointageChefProjetController : Controller
     {
         private readonly ApplicationDbContext _context;
