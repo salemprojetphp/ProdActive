@@ -22,9 +22,9 @@ public class CalendarController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var userId = "1";
-        var trackedProjects = await _userService.GetTrackedProjectsAsync(userId);
-        var projects = await _userService.GetAllProjectsAsync(userId);
+        var currentUserId = _userManager.GetUserId(User);
+        var trackedProjects = await _userService.GetTrackedProjectsAsync(currentUserId);
+        var projects = await _userService.GetAllProjectsAsync(currentUserId);
         // Filter out tracked projects
         var projectsToTrack = projects.Where(p => !trackedProjects.Any(tp => tp.Id == p.Id)).ToList();
         if (projects == null || !projects.Any())
@@ -41,7 +41,7 @@ public class CalendarController : Controller
     {
         try
         {
-            var currentUserId = "1"; // For testing purposes
+            var currentUserId = _userManager.GetUserId(User);// For testing purposes
             if (currentUserId == null)
             {
                 return Unauthorized(new { message = "User is not authenticated." });
@@ -97,8 +97,7 @@ public class CalendarController : Controller
     [HttpGet("calendar/getAllProjectsToTrack")]
     public async Task<IActionResult> GetAllProjectsToTrack()
     {
-        // var currentUserId = _userManager.GetUserId(User);
-        var currentUserId = "1"; // For testing purposes 
+        var currentUserId = _userManager.GetUserId(User);
         var projects = await _userService.GetAllProjectsAsync(currentUserId);
         var trackedProjects = await _userService.GetTrackedProjectsAsync(currentUserId);
         var projectsToTrack = projects.Where(p => !trackedProjects.Any(tp => tp.Id == p.Id)).ToList();
@@ -114,8 +113,7 @@ public class CalendarController : Controller
         }
 
         // Get the current user's ID
-        // var currentUserId = _userManager.GetUserId(User); // Using ClaimTypes for identity resolution
-        var currentUserId = "1"; // For testing purposes 
+        var currentUserId = _userManager.GetUserId(User); // Using ClaimTypes for identity resolution
         if (string.IsNullOrEmpty(currentUserId))
         {
             return Unauthorized(new { success = false, message = "User is not authenticated." });
@@ -145,7 +143,7 @@ public class CalendarController : Controller
 
         try
         {
-            var currentUserId = "1"; // For testing purposes (you should get the actual user ID here)
+            var currentUserId = _userManager.GetUserId(User);
 
             // Call the RemoveTrackedProjectAsync function to remove the project from the tracked list
             var result = await _userService.RemoveTrackedProjectAsync(currentUserId, projectId);
