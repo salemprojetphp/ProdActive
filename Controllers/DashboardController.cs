@@ -8,7 +8,9 @@ using _.Models;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class DashboardController : Controller
 {
     private readonly ILogger<DashboardController> _logger;
