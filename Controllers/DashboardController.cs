@@ -74,6 +74,71 @@ public class DashboardController : Controller
         return View();  
     }
 
+    [Route("/Dashboard/Feedbacks")]
+    public async Task<IActionResult> Feedbacks()
+    {
+        // Calculate the counts for positive and negative feedbacks
+        var feedbackCounts = await _context.Feedbacks
+            .GroupBy(f => f.Rating)
+            .Select(g => new
+            {
+                Rating = g.Key,
+                Count = g.Count()
+            })
+            .ToListAsync();
+
+        var negativeFeedbacks = feedbackCounts.FirstOrDefault(f => f.Rating == 0)?.Count ?? 0;
+        var positiveFeedbacks = feedbackCounts.FirstOrDefault(f => f.Rating == 1)?.Count ?? 0;
+
+        // Calculate the total number of feedbacks
+        var totalFeedbacks = await _context.Feedbacks.CountAsync();
+
+        // Create the ViewModel and pass it to the view
+        var feedbackDashboardVM = new FeedbackDashboardViewModel
+        {
+            NegativeFeedbacks = negativeFeedbacks,
+            PositiveFeedbacks = positiveFeedbacks,
+            TotalFeedbacks = totalFeedbacks
+        };
+
+        return View(feedbackDashboardVM);  
+    }
+
+    [Route("/Dashboard/FeedbacksData")]
+    public async Task<IActionResult> GetFeedbackData()
+    {
+        // Retrieve all feedback data for the current week from the database
+        var feedbackData = await _context.Feedbacks.ToListAsync();
+
+        // Pass the data to the helper to get the feedback counts for the current week
+        var currentWeekFeedbacks = FeedbackHelper.GetFeedbackCountsForCurrentWeek(feedbackData);
+
+        // Return the data as JSON to be used in the chart
+        return Json(new
+        {
+            currentWeekPositive = currentWeekFeedbacks.PositiveFeedbacks,
+            currentWeekNegative = currentWeekFeedbacks.NegativeFeedbacks,
+        });
+    }
+
+    [Route("/Dashboard/FeedbackPercentages")]
+    public async Task<IActionResult> GetFeedbackPercentages()
+    {
+        // Retrieve all feedback data from the database
+        var feedbackData = await _context.Feedbacks.ToListAsync();
+
+        // Use the helper method to calculate the percentages of positive and negative feedbacks
+        var (positivePercentage, negativePercentage) = FeedbackHelper.GetFeedbackPercentages(feedbackData);
+
+        // Return the percentages as JSON
+        return Json(new
+        {
+            positivePercentage = positivePercentage,
+            negativePercentage = negativePercentage
+        });
+    }
+
+
     private async Task WriteChartDataToJson(object data)
     {
         var jsonString = JsonSerializer.Serialize(data);
