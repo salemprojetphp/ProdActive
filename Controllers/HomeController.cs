@@ -1,29 +1,33 @@
 using System.Diagnostics;
+using System.Security.Claims;
+using _.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project_ERP.Models;
 
 namespace _.Controllers;
-
+[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    private readonly ProductivityML _productivityML;
+    private readonly ApplicationDbContext _db;
+    public HomeController(ILogger<HomeController> logger, ProductivityML productivityML, ApplicationDbContext db)
     {
+        _productivityML = productivityML;
         _logger = logger;
+        _db = db;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        if (User.Identity != null && User.Identity.IsAuthenticated)
-        {
-            // The user is logged in
-            return View();
-        }
-        else{
-            return Redirect("/Identity/Account/Login");
-        }
-
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = _db.ApplicationUsers.Find(userId);
+        var productivityData = _productivityML.GetProductivityData(user)
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToString());
+        float score = await _productivityML.GetProductivityScore(productivityData);
+        // The user is logged in
+        return View(score);
     }
 
     public IActionResult Privacy()
