@@ -14,7 +14,6 @@ namespace _.Helpers
 {
     public static class DashboardHelper
     {
-
         public static Dictionary<string, double> GetCompletionRateDict(Dictionary<ApplicationUser, IEnumerable<Tache>> tasksPerEmployee){
             var completionRatePerEmployee = new Dictionary<string, double>();
 
@@ -58,6 +57,79 @@ namespace _.Helpers
             var filePath = Path.Combine("wwwroot", "json", "EmployeeDashboard", "CompletionRatePerEmployee.json");
             await File.WriteAllTextAsync(filePath, json);
         }
+
+        public static async Task WriteAverageTaskDurationAsync(Dictionary<ApplicationUser, IEnumerable<Tache>> tasksPerEmployee)
+        {
+            var averageDurationPerEmployee = new Dictionary<string, double>();
+
+            // Calculate the average task duration for each employee
+            foreach (var employee in tasksPerEmployee)
+            {
+                var completedTasks = employee.Value.Where(t => t.Status == 1 && t.DateFin.HasValue);
+
+                // Calculate average duration
+                var averageDuration = completedTasks.Any() 
+                    ? completedTasks.Average(t => t.DateFin.Value.Subtract(t.DateDebut.Value).TotalDays) 
+                    : 0;
+
+                averageDurationPerEmployee.Add(employee.Key.UserName, averageDuration);
+            }
+
+            // Serialize the dictionary to JSON
+            var json = JsonSerializer.Serialize(averageDurationPerEmployee);
+
+            // Write to JSON file
+            var filePath = Path.Combine("wwwroot", "json", "EmployeeDashboard", "AverageTaskDurationPerEmployee.json");
+            await System.IO.File.WriteAllTextAsync(filePath, json);
+        }
         
+        public static async Task WriteProjectProgressByImportanceAsync(IEnumerable<Tache> tasks)
+        {
+            try
+            {
+                var progressPerImportance = new Dictionary<int, double>();
+
+                // Group tasks by importance level
+                var tasksGroupedByImportance = tasks.GroupBy(t => t.Importance);
+
+                foreach (var group in tasksGroupedByImportance)
+                {
+                    var importanceLevel = group.Key;
+                    Console.WriteLine("importanceLevel: " + importanceLevel);
+
+                    // Calculate project progress for this importance level
+                    var FinishedTasks = group.Count(t => t.Status == 1);
+                    Console.WriteLine("FinishedTasks: " + FinishedTasks);
+                    var taskCount = group.Count();
+                    Console.WriteLine("taskCount" + taskCount);
+                    double progress = ((double)FinishedTasks / taskCount) * 100;
+                    Console.WriteLine("progress: " + progress);
+
+                    progressPerImportance.Add(importanceLevel, progress);
+                }
+
+                // Convert to JSON
+                var json = JsonSerializer.Serialize(progressPerImportance, new JsonSerializerOptions { WriteIndented = true });
+
+                // Ensure directory exists
+                var directoryPath = Path.Combine("wwwroot", "json", "EmployeeDashboard");
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                // Write to JSON file
+                var filePath = Path.Combine(directoryPath, "ProjectProgressByImportance.json");
+                await File.WriteAllTextAsync(filePath, json);
+
+                Console.WriteLine($"JSON successfully written to {filePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error writing JSON: {ex.Message}");
+            }
+        }
+
+
     }
 }

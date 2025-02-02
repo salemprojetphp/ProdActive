@@ -69,7 +69,13 @@ public class DashboardController : Controller
             }
         }
         Dictionary<string, double> completionRatePerEmployee = DashboardHelper.GetCompletionRateDict(TasksPerEmployee);
-        DashboardHelper.WriteTaskCompletionRateAsync(completionRatePerEmployee);
+        await DashboardHelper.WriteTaskCompletionRateAsync(completionRatePerEmployee);
+        await DashboardHelper.WriteAverageTaskDurationAsync(TasksPerEmployee);
+
+        var FinishedTasks = await _context.Tasks
+            .Where(t => projectIds.Contains(t.ProjectId))
+            .ToListAsync();
+        await DashboardHelper.WriteProjectProgressByImportanceAsync(FinishedTasks);
 
         // Get the top 3 performers
         Dictionary<ApplicationUser, double> topPerformersRates = completionRatePerEmployee
