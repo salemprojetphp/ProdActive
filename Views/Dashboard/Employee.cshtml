@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Employee";
     Layout = "./_DashboardNav.cshtml";
-}
+} 
 
 <div class="tab-content tab-content-basic">
   <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview">
@@ -51,13 +51,11 @@
               <div class="card-body">
                 <div class="d-sm-flex justify-content-between align-items-start">
                   <div>
-                    <h4 class="card-title card-title-dash">Performance Line Chart</h4>
-                    <h5 class="card-subtitle card-subtitle-dash">Lorem Ipsum is simply dummy text of the printing</h5>
+                    <h4 class="card-title card-title-dash">Task Completion rate per Employee</h4>
                   </div>
-                  <div id="performanceLine-legend"></div>
                 </div>
-                <div class="chartjs-wrapper mt-4">
-                  <canvas id="performanceLine" width=""></canvas>
+                <div class="chartjs-wrapper mt-4" style="width: 100%;">
+                  <canvas id="CompletionRateChart"></canvas>
                 </div>
               </div>
             </div>
@@ -67,47 +65,32 @@
       <div class="col-lg-4 d-flex flex-column">
         <div class="row flex-grow">
           <div class="col-md-6 col-lg-12 grid-margin stretch-card">
-            <div class="card bg-primary card-rounded">
-              <div class="card-body pb-0">
-                <h4 class="card-title card-title-dash text-white mb-4">Status Summary</h4>
-                <div class="row">
-                  <div class="col-sm-4">
-                    <p class="status-summary-ight-white mb-1">Closed Value</p>
-                    <h2 class="text-info">357</h2>
-                  </div>
-                  <div class="col-sm-8">
-                    <div class="status-summary-chart-wrapper pb-4">
-                      <canvas id="status-summary"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-12 grid-margin stretch-card">
             <div class="card card-rounded">
               <div class="card-body">
                 <div class="row">
-                  <div class="col-lg-6">
-                    <div class="d-flex justify-content-between align-items-center mb-2 mb-sm-0">
-                      <div class="circle-progress-width">
-                        <div id="totalVisitors" class="progressbar-js-circle pr-2"></div>
-                      </div>
+                  <div class="col-lg-12">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
                       <div>
-                        <p class="text-small mb-2">Total Visitors</p>
-                        <h4 class="mb-0 fw-bold">26.80%</h4>
+                        <h4 class="card-title card-title-dash">Top Performers</h4>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-lg-6">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div class="circle-progress-width">
-                        <div id="visitperday" class="progressbar-js-circle pr-2"></div>
-                      </div>
-                      <div>
-                        <p class="text-small mb-2">Visits per day</p>
-                        <h4 class="mb-0 fw-bold">9065</h4>
-                      </div>
+                    <div class="mt-3">
+                      @{
+                        int i =1;
+                      }
+                      @foreach(var employee in Model.topPerformersRates)
+                      {
+                        <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
+                          <div class="d-flex">
+                            <img class="img-sm rounded-10" src="@@Url.Content($"~/images/medals/medal{i}.jpg")" alt="profile">
+                            <div class="wrapper ms-3">
+                              <p class="ms-1 mb-1 fw-bold">@employee.Key.UserName</p>
+                              <small class="text-muted mb-0">Completion Rate: @employee.Value%</small>
+                            </div>  
+                          </div>
+                        </div>
+                        i++;
+                      }
                     </div>
                   </div>
                 </div>
@@ -115,7 +98,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> 
     </div>
     <div class="row">
       <div class="col-lg-8 d-flex flex-column">
@@ -622,78 +605,11 @@
             </div>
           </div>
         </div>
-        <div class="row flex-grow">
-          <div class="col-12 grid-margin stretch-card">
-            <div class="card card-rounded">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                      <div>
-                        <h4 class="card-title card-title-dash">Top Performer</h4>
-                      </div>
-                    </div>
-                    <div class="mt-3">
-                      <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
-                        <div class="d-flex">
-                          <img class="img-sm rounded-10" src="~/images/faces/face1.jpg" alt="profile">
-                          <div class="wrapper ms-3">
-                            <p class="ms-1 mb-1 fw-bold">Brandon Washington</p>
-                            <small class="text-muted mb-0">162543</small>
-                          </div>
-                        </div>
-                        <div class="text-muted text-small"> 1h ago </div>
-                      </div>
-                      <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
-                        <div class="d-flex">
-                          <img class="img-sm rounded-10" src="~/images/faces/face2.jpg" alt="profile">
-                          <div class="wrapper ms-3">
-                            <p class="ms-1 mb-1 fw-bold">Wayne Murphy</p>
-                            <small class="text-muted mb-0">162543</small>
-                          </div>
-                        </div>
-                        <div class="text-muted text-small"> 1h ago </div>
-                      </div>
-                      <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
-                        <div class="d-flex">
-                          <img class="img-sm rounded-10" src="~/images/faces/face3.jpg" alt="profile">
-                          <div class="wrapper ms-3">
-                            <p class="ms-1 mb-1 fw-bold">Katherine Butler</p>
-                            <small class="text-muted mb-0">162543</small>
-                          </div>
-                        </div>
-                        <div class="text-muted text-small"> 1h ago </div>
-                      </div>
-                      <div class="wrapper d-flex align-items-center justify-content-between py-2 border-bottom">
-                        <div class="d-flex">
-                          <img class="img-sm rounded-10" src="~/images/faces/face4.jpg" alt="profile">
-                          <div class="wrapper ms-3">
-                            <p class="ms-1 mb-1 fw-bold">Matthew Bailey</p>
-                            <small class="text-muted mb-0">162543</small>
-                          </div>
-                        </div>
-                        <div class="text-muted text-small"> 1h ago </div>
-                      </div>
-                      <div class="wrapper d-flex align-items-center justify-content-between pt-2">
-                        <div class="d-flex">
-                          <img class="img-sm rounded-10" src="~/images/faces/face5.jpg" alt="profile">
-                          <div class="wrapper ms-3">
-                            <p class="ms-1 mb-1 fw-bold">Rafell John</p>
-                            <small class="text-muted mb-0">Alaska, USA</small>
-                          </div>
-                        </div>
-                        <div class="text-muted text-small"> 1h ago </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </div>
 
-
+@section Scripts {
+    <script src="~/js/EmployeeDashboard/TaskCompletionRate.js"></script>
+}

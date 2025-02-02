@@ -48,17 +48,41 @@ public class DashboardController : Controller
         var managerIds = await _context.Projects.Select(p => p.ManagerId).ToListAsync();
 
         // Get all active employees
-        var totalActiveEmployees = projectEmployeeIds.Concat(managerIds).Distinct().Count();
+        var activeEmployeesIds = projectEmployeeIds.Union(managerIds);
 
+        // Get all tasks per employee with the project active
+        Dictionary<ApplicationUser, IEnumerable<Tache>> TasksPerEmployee = new Dictionary<ApplicationUser, IEnumerable<Tache>>();
+        foreach (var employeeId in activeEmployeesIds)
+        {
+            var tasks = await _context.Tasks
+                .Where(t => t.EmployeeId == employeeId && projectIds.Contains(t.ProjectId))
+                .ToListAsync();
+
+            var employee = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == employeeId);
+
+            if (employee != null)
+            {
+                TasksPerEmployee.Add(employee, tasks);
+            }
+        }
+        Dictionary<string, double> completionRatePerEmployee = DashboardHelper.GetCompletionRateDict(TasksPerEmployee);
+        DashboardHelper.WriteTaskCompletionRateAsync(completionRatePerEmployee);
+
+        // Get the top 3 performers
+        Dictionary<ApplicationUser, double> topPerformersRates = completionRatePerEmployee
+            .OrderByDescending(kvp => kvp.Value)
+            .Take(3)
+            .ToDictionary(kvp => TasksPerEmployee.Keys.FirstOrDefault(u => u.UserName == kvp.Key), kvp => kvp.Value);
+
+        // Pass Data to the view 
         EmployeeDashboardViewModel employeeDashboardVM = new EmployeeDashboardViewModel
         {
-            TotalActiveEmployees = totalActiveEmployees,
-            TotalActiveProjects = projectIds.Count,
-            // TasksCompleted = new List<EmployeeChartData>(),
-            // CompletionRates = new List<EmployeeChartData>(),
-            // AverageDurations = new List<EmployeeChartData>(),
-            // ImportanceDurations = new List<ImportanceChartData>()
+            TotalActiveEmployees = activeEmployeesIds.Count(),
+            TotalActiveProjects = projectIds.Count(),
+            topPerformersRates = topPerformersRates,
         };
+
         return View(employeeDashboardVM);
     }
 
