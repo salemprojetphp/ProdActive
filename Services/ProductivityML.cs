@@ -85,7 +85,7 @@ public class ProductivityML
         var json = JsonConvert.SerializeObject(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync("http://localhost:5000/predict", content);
+        var response = await _httpClient.PostAsync("http://localhost:5000/productivity", content);
         
         var responseData = await response.Content.ReadAsStringAsync(); // Read response content
         Console.WriteLine($"API Response: {responseData}"); // Log the response
