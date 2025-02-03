@@ -94,12 +94,6 @@ public class DashboardController : Controller
         return View(employeeDashboardVM);
     }
 
-    [Route("/Dashboard/Projects")]
-    public async Task<IActionResult> Projects()
-    {
-        return View();  
-    }
-
     [Route("/Dashboard/Attendance")]
     public async Task<IActionResult> Attendance()
     {
