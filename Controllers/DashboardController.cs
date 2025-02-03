@@ -24,17 +24,11 @@ public class DashboardController : Controller
     [Route("/Dashboard")]
     public IActionResult Index()
     {
-        if (User.Identity != null && User.Identity.IsAuthenticated)
-        {
-            // The user is logged in
-            return View();
-        }
-        else{
-            return Redirect("/Identity/Account/Login");
-        }
+        return View();
     }
 
     [Route("/Dashboard/Employee")]
+    [Authorize(Roles = "Employee, ChefProjet")]
     public async Task<IActionResult> Employee()
     {
         // Get all project IDs
@@ -98,7 +92,7 @@ public class DashboardController : Controller
     {
         return View();  
     }
-
+    [Authorize(Roles = "ChefProjet")]
     [Route("/Dashboard/Attendance")]
     public async Task<IActionResult> Attendance()
     {
@@ -155,6 +149,7 @@ public class DashboardController : Controller
     }
 
     [Route("/Dashboard/Feedbacks")]
+    [Authorize(Roles = "ChefProjet")]
     public async Task<IActionResult> Feedbacks()
     {
         // Calculate the counts for positive and negative feedbacks
@@ -185,6 +180,7 @@ public class DashboardController : Controller
     }
 
     [Route("/Dashboard/FeedbacksData")]
+    [Authorize(Roles = "ChefProjet")]
     public async Task<IActionResult> GetFeedbackData()
     {
         // Retrieve all feedback data for the current week from the database
@@ -202,6 +198,7 @@ public class DashboardController : Controller
     }
 
     [Route("/Dashboard/FeedbackPercentages")]
+    [Authorize(Roles = "ChefProjet")]
     public async Task<IActionResult> GetFeedbackPercentages()
     {
         // Retrieve all feedback data from the database
