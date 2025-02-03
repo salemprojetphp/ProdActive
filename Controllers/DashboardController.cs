@@ -24,18 +24,11 @@ public class DashboardController : Controller
     [Route("/Dashboard")]
     public IActionResult Index()
     {
-        // if (User.Identity != null && User.Identity.IsAuthenticated)
-        // {
-        //     // The user is logged in
-        //     return View();
-        // }
-        // else{
-        //     return Redirect("/Identity/Account/Login");
-        // }
         return View();
     }
 
     [Route("/Dashboard/Employee")]
+    [Authorize(Roles = "Employee, ChefProjet")]
     public async Task<IActionResult> Employee()
     {
         // Get all project IDs
@@ -93,14 +86,64 @@ public class DashboardController : Controller
 
         return View(employeeDashboardVM);
     }
-
+    [Authorize(Roles = "ChefProjet")]
     [Route("/Dashboard/Attendance")]
     public async Task<IActionResult> Attendance()
     {
-        return View();  
+        // Get all employees (ID & Name)
+        var employees = await _context.Users
+            .Select(e => new { e.Id, e.UserName })
+            .ToListAsync();
+
+        var employeeNames = employees.ToDictionary(e => e.Id, e => e.UserName);
+
+        // Get all data for the helper
+        var conges = await _context.Conges.ToListAsync();
+        var pointages = await _context.Pointages.ToListAsync();
+
+        // Use the helper methods to calculate the required data
+        var leaveFrequency = AttendanceHelper.GetLeaveFrequency(conges);
+        var avgWorkingHours = AttendanceHelper.GetAvgWorkingHours(pointages);
+        var attendanceRate = AttendanceHelper.GetAttendanceRate(pointages);
+        var lateArrivals = AttendanceHelper.GetLateArrivals(pointages);
+        var leaveUtilizationRate = AttendanceHelper.GetLeaveUtilizationRate(conges);
+        var pendingLeaveRequests = AttendanceHelper.GetPendingLeaveRequests(conges);
+        var acceptedLeaveRequests = AttendanceHelper.GetAcceptedLeaveRequests(conges);
+        var rejectedLeaveRequests = AttendanceHelper.GetRejectedLeaveRequests(conges);
+
+        // Prepare ViewModel with Employee Names and Calculations
+        var attendanceDashboardVM = new AttendanceDashboardViewModel
+        {
+            LeaveFrequency = leaveFrequency
+                .Where(lf => employeeNames.ContainsKey(lf.Key))
+                .ToDictionary(lf => employeeNames[lf.Key], lf => lf.Value),
+
+            AvgWorkingHours = avgWorkingHours
+                .Where(lf => employeeNames.ContainsKey(lf.Key))
+                .ToDictionary(lf => employeeNames[lf.Key], lf => lf.Value),
+
+            AttendanceRate = attendanceRate
+                .Where(lf => employeeNames.ContainsKey(lf.Key))
+                .ToDictionary(lf => employeeNames[lf.Key], lf => lf.Value),
+
+            LateArrivals = lateArrivals
+                .Where(lf => employeeNames.ContainsKey(lf.Key))
+                .ToDictionary(lf => employeeNames[lf.Key], lf => lf.Value),
+
+            LeaveUtilizationRate = leaveUtilizationRate
+                .Where(lf => employeeNames.ContainsKey(lf.Key))
+                .ToDictionary(lf => employeeNames[lf.Key], lf => lf.Value),
+
+            PendingLeaveRequests = pendingLeaveRequests,
+            AcceptedLeaveRequests = acceptedLeaveRequests,
+            RejectedLeaveRequests = rejectedLeaveRequests
+        };
+
+        return View(attendanceDashboardVM);
     }
 
     [Route("/Dashboard/Feedbacks")]
+    [Authorize(Roles = "ChefProjet")]
     public async Task<IActionResult> Feedbacks()
     {
         // Calculate the counts for positive and negative feedbacks
@@ -131,6 +174,7 @@ public class DashboardController : Controller
     }
 
     [Route("/Dashboard/FeedbacksData")]
+    [Authorize(Roles = "ChefProjet")]
     public async Task<IActionResult> GetFeedbackData()
     {
         // Retrieve all feedback data for the current week from the database
@@ -148,6 +192,7 @@ public class DashboardController : Controller
     }
 
     [Route("/Dashboard/FeedbackPercentages")]
+    [Authorize(Roles = "ChefProjet")]
     public async Task<IActionResult> GetFeedbackPercentages()
     {
         // Retrieve all feedback data from the database

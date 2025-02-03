@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace _.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin, ChefProjet")]
 public class FeedbackController : Controller
 {
     private readonly IFeedbackService _feedbackService;
