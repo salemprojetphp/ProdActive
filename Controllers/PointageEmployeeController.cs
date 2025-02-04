@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Project_ERP.Controllers
 {
     [Authorize]
+    [Authorize(Roles="ChefProjet, Admin")]
     public class PointageEmployeeController : Controller
     {
         private readonly IPointageService _pointageService;
@@ -85,7 +86,7 @@ namespace Project_ERP.Controllers
         public async Task<IActionResult> Create(Pointage pointage)
         {
             // Example: Assign employee ID from logged-in user (you can get this from your auth system)
-            pointage.EmployeeId = "1";  // Simulating a logged-in user with ID "1"
+            pointage.EmployeeId = "1";
 
             if (ModelState.IsValid)
             {

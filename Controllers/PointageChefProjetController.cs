@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Project_ERP.Controllers
 {
     [Authorize(Roles = "ChefProjet")]
+    [Authorize] 
     public class PointageChefProjetController : Controller
     {
         private readonly ApplicationDbContext _context;

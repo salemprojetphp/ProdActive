@@ -1,3 +1,8 @@
+insert into AspNetUserRoles values (
+  (select Id from AspNetUsers WHERE Email='admin@admin.com'), 
+  (select Id from AspNetRoles where NormalizedName = 'ADMIN')
+)
+
 -- Insert synthetic users into the AspNetUsers table
 -- Insert 25 synthetic users into the AspNetUsers table
 INSERT INTO AspNetUsers 
