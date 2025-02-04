@@ -150,6 +150,12 @@ namespace ProdActive.Areas.Identity.Pages.Account
                 // foreach (var error in result.Errors)
                 // {
                 //     ModelState.AddModelError(string.Empty, error.Description);
+                 } else {
+                    foreach (var error in result.Errors)
+                    {
+                        Console.WriteLine($"Error: {error.Description}");
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
                  }
             }
 

@@ -71,7 +71,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(p => p.Employee)
             .WithMany(e => e.Pointages)
             .HasForeignKey(p => p.EmployeeId);
+        var roles = new List<IdentityRole>
+            {
+                new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
+                new IdentityRole { Name = "Employee", NormalizedName = "EMPLOYEE" },
+                new IdentityRole { Name = "ChefProjet", NormalizedName = "CHEFPROJET"}
+            };
 
+        modelBuilder.Entity<IdentityRole>().HasData(roles);
         base.OnModelCreating(modelBuilder);
     }
 }

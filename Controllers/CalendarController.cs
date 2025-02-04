@@ -19,7 +19,7 @@ public class CalendarController : Controller
         _userService = userService;
         _userManager = userManager;
     }
-
+    
     public async Task<IActionResult> Index()
     {
         var currentUserId = _userManager.GetUserId(User);

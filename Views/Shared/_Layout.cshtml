@@ -20,9 +20,7 @@
     <link rel="stylesheet" href="~/css/Dashboard/site.css" asp-append-version="true" />
 </head>
 <body>
-    @if (User.Identity != null && User.Identity.IsAuthenticated){
-        @await Html.PartialAsync("_Navbar")
-    }
+    @await Html.PartialAsync("_Navbar")
     <div class="container-fluid page-body-wrapper">
         @if (User.Identity != null && User.Identity.IsAuthenticated){
             @await Html.PartialAsync("_Sidebar")
@@ -52,6 +50,13 @@
     <script src="~/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
     <!-- endinject -->
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('click', function(e) {
+                console.log(e.target);
+            });
+        });
+    </script>
 
 </body>
 </html>

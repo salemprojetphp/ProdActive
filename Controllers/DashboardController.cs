@@ -21,20 +21,9 @@ public class DashboardController : Controller
         _context = context;
     }
 
-    [Route("/Dashboard")]
-    public IActionResult Index()
-    {
-        if (User.Identity != null && User.Identity.IsAuthenticated)
-        {
-            // The user is logged in
-            return View();
-        }
-        else{
-            return Redirect("/Identity/Account/Login");
-        }
-    }
-
     [Route("/Dashboard/Employee")]
+    [Authorize(Roles = "ChefProjet")]
+    [Authorize]
     public async Task<IActionResult> Employee()
     {
         // Get all project IDs
@@ -92,14 +81,10 @@ public class DashboardController : Controller
 
         return View(employeeDashboardVM);
     }
-
-    [Route("/Dashboard/Projects")]
-    public async Task<IActionResult> Projects()
-    {
-        return View();  
-    }
-
+    
+    [Authorize(Roles = "ChefProjet")]
     [Route("/Dashboard/Attendance")]
+    [Authorize]
     public async Task<IActionResult> Attendance()
     {
         // Get all employees (ID & Name)
@@ -155,6 +140,8 @@ public class DashboardController : Controller
     }
 
     [Route("/Dashboard/Feedbacks")]
+    [Authorize(Roles = "ChefProjet")]
+    [Authorize]
     public async Task<IActionResult> Feedbacks()
     {
         // Calculate the counts for positive and negative feedbacks
@@ -185,6 +172,8 @@ public class DashboardController : Controller
     }
 
     [Route("/Dashboard/FeedbacksData")]
+    [Authorize(Roles = "ChefProjet")]
+    [Authorize]
     public async Task<IActionResult> GetFeedbackData()
     {
         // Retrieve all feedback data for the current week from the database
@@ -202,6 +191,8 @@ public class DashboardController : Controller
     }
 
     [Route("/Dashboard/FeedbackPercentages")]
+    [Authorize(Roles = "ChefProjet")]
+    [Authorize]
     public async Task<IActionResult> GetFeedbackPercentages()
     {
         // Retrieve all feedback data from the database
@@ -217,7 +208,6 @@ public class DashboardController : Controller
             negativePercentage = negativePercentage
         });
     }
-
 
     private async Task WriteChartDataToJson(object data)
     {
