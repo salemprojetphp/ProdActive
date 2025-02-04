@@ -23,6 +23,15 @@ namespace _.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Pointage>> GetAllByEmployeeId(string employeeId)
+        {
+            return await _repository.Query()
+                .OfType<Pointage>() // Ensure we only work with Pointage if T is generic
+                .Include(p => p.Employee)
+                .Where(p => p.EmployeeId == employeeId)
+                .ToListAsync();
+        }
+
         public async Task<Pointage> GetByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);

@@ -41,7 +41,7 @@ public class CalendarController : Controller
     {
         try
         {
-            var currentUserId = _userManager.GetUserId(User);// For testing purposes
+            var currentUserId = _userManager.GetUserId(User);
             if (currentUserId == null)
             {
                 return Unauthorized(new { message = "User is not authenticated." });

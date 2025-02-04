@@ -3,6 +3,7 @@ using _.Models;
 using _.Services;
 using _.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Project_ERP.Controllers
 {
@@ -10,18 +11,20 @@ namespace Project_ERP.Controllers
     public class PointageEmployeeController : Controller
     {
         private readonly IPointageService _pointageService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PointageEmployeeController(IPointageService pointageService)
+        public PointageEmployeeController(IPointageService pointageService, UserManager<ApplicationUser> userManager)
         {
             _pointageService = pointageService;
+            _userManager = userManager;
         }
 
         // GET: attendance
         [Route("attendance")]
         public async Task<IActionResult> Index()
         {
-            // Use the service to get all pointages
-            var pointages = await _pointageService.GetAllAsync();
+            // Use the service to get all pointages of the logged in user 
+            var pointages = await _pointageService.GetAllByEmployeeId(_userManager.GetUserId(User));
 
             // Assuming you want to display some custom labels for transaction types
             var dictionary = new Dictionary<int, string>
@@ -85,7 +88,7 @@ namespace Project_ERP.Controllers
         public async Task<IActionResult> Create(Pointage pointage)
         {
             // Example: Assign employee ID from logged-in user (you can get this from your auth system)
-            pointage.EmployeeId = "1";
+            pointage.EmployeeId = _userManager.GetUserId(User);
 
             if (ModelState.IsValid)
             {

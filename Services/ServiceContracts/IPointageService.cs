@@ -9,6 +9,8 @@ namespace _.Services
         // Get all pointages
         Task<IEnumerable<Pointage>> GetAllAsync();
 
+        Task<IEnumerable<Pointage>> GetAllByEmployeeId(string employeeId);
+
         // Get pointage by its ID
         Task<Pointage> GetByIdAsync(int id);
 
