@@ -48,9 +48,22 @@
   
       //Close other submenu in sidebar on opening any
   
-      sidebar.on('show.bs.collapse', '.collapse', function () {
-        sidebar.find('.collapse.show').collapse('hide');
-      });
+      sidebar.on('click', '.nav-item > a', function (e) {
+        var $this = $(this);
+        var $submenu = $this.next('.collapse');
+    
+        if ($submenu.length) {
+            e.preventDefault(); // Prevents the default link behavior
+    
+            if ($submenu.hasClass('show')) {
+                $submenu.collapse('hide'); // Close if already open
+            } else {
+                sidebar.find('.collapse.show').collapse('hide'); // Close other open dropdowns
+                $submenu.collapse('toggle'); // Toggle the clicked one
+            }
+        }
+    });
+    
   
   
       //Change sidebar and content-wrapper height
