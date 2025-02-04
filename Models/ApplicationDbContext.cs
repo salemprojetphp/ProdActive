@@ -6,6 +6,8 @@ namespace _.Models;
 // This DbContext class is derived from IdentityDbContext to include Identity tables
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
+    internal readonly IEnumerable<object> TrackedProjects;
+
     public DbSet<Feedback>? Feedbacks { get; set; }
     public DbSet<ReunionParticipant>? ReunionParticipants { get; set; }
     public DbSet<ProjectEmployee>? ProjectEmployees { get; set; }
@@ -15,6 +17,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Pointage>? Pointages { get; set; }
     public DbSet<Conge>? Conges { get; set; }
     public DbSet<Tache>? Tasks { get; set; }     
+    public DbSet<Notification> Notifications { get; set; }
+    public Task<List<Tache>>? Taches { get; internal set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

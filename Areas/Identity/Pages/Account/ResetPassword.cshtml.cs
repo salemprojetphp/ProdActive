@@ -66,23 +66,10 @@ namespace ProdActive.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // if (!ModelState.IsValid)
-            // {
-            //     Console.WriteLine("Model state is invalid");
-            //     foreach (var modelError in ModelState)
-            //     {
-            //         foreach (var error in modelError.Value.Errors)
-            //         {
-            //             Console.WriteLine($"Key: {modelError.Key}, Error: {error.ErrorMessage}");
-            //         }
-            //     }
-            //     return Page();
-            // }
-
             try
             {
                 // Find the user from the token itself
-                var users = _userManager.Users.ToList(); // Get all users to check the token
+                var users = _userManager.Users.ToList(); 
                 ApplicationUser user = null;
 
                 foreach (var u in users)
