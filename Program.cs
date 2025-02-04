@@ -6,77 +6,76 @@ using _.Repositories;
 using _.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-//Load the .env variables
+// Load the .env variables
 DotNetEnv.Env.Load();
 var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
-// Add services and repos to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
-
-//REPOSITORIES
-builder.Services.AddScoped<IRepository<Project>, Repository<Project>>();
-builder.Services.AddScoped<IRepository<ProjectEmployee>, Repository<ProjectEmployee>>();
-builder.Services.AddScoped<IRepository<TrackedProjects>, Repository<TrackedProjects>>();
-builder.Services.AddScoped<IRepository<ProjectEmployee>, Repository<ProjectEmployee>>();
-builder.Services.AddScoped<IRepository<ReunionParticipant>, Repository<ReunionParticipant>>();
-builder.Services.AddScoped<IRepository<Feedback>, Repository<Feedback>>();
-builder.Services.AddScoped<IRepository<Pointage>, Repository<Pointage>>();
-builder.Services.AddScoped<ProductivityML>();
-
-//SERVICES
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IProjectService, ProjectService>();
-builder.Services.AddScoped<IPointageService, PointageService>();
-
-
-
-// Add DbContext and Identity services
-
-builder.Services.AddScoped(typeof(IRepository<Feedback>), typeof(Repository<Feedback>));
-builder.Services.AddScoped<IFeedbackService, FeedbackService>();
-
+//  Add Database Context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>() 
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddTransient<IEmailSender, EmailSender>();
-builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
-builder.Services.Configure<IdentityOptions>(options =>{
+
+//  Add Identity Services & Register SignInManager
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+
     // Password settings.
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 1;
+
     // Lockout settings.
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.AllowedForNewUsers = true;
+
     // User settings.
     options.User.AllowedUserNameCharacters =
-    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-    options.User.RequireUniqueEmail = false;
-});
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;
+})
+    .AddRoles<IdentityRole>() 
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// Register SentimentAnalysisService and HttpClient
+builder.Services.AddScoped<SignInManager<ApplicationUser>>();
+builder.Services.AddScoped<UserManager<ApplicationUser>>();
+builder.Services.AddScoped<NotificationService>();
+
+// Email Sender Service
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
+
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+// REPOSITORIES
+builder.Services.AddScoped<IRepository<Project>, Repository<Project>>();
+builder.Services.AddScoped<IRepository<ProjectEmployee>, Repository<ProjectEmployee>>();
+builder.Services.AddScoped<IRepository<TrackedProjects>, Repository<TrackedProjects>>();
+builder.Services.AddScoped<IRepository<ReunionParticipant>, Repository<ReunionParticipant>>();
+builder.Services.AddScoped<IRepository<Feedback>, Repository<Feedback>>();
+builder.Services.AddScoped<IRepository<Pointage>, Repository<Pointage>>();
+builder.Services.AddScoped<ProductivityML>();
+
+// SERVICES
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IPointageService, PointageService>();
+builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+
+//  Register Sentiment Analysis Service
 builder.Services.AddHttpClient<SentimentAnalysisService>(client =>
 {
-    // Set the base URL for the sentiment analysis API
-    client.BaseAddress = new Uri("http://localhost:5000/");  // Replace with your API URL
+    client.BaseAddress = new Uri("http://localhost:5000/");
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
-
-// add mapping of the services 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -87,7 +86,6 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 app.MapRazorPages();
 app.MapControllerRoute(

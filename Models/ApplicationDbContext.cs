@@ -15,6 +15,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Pointage>? Pointages { get; set; }
     public DbSet<Conge>? Conges { get; set; }
     public DbSet<Tache>? Tasks { get; set; }     
+    public DbSet<Notification> Notifications { get; set; }
+
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
