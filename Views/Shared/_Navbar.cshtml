@@ -51,7 +51,8 @@
         document.addEventListener('DOMContentLoaded', function() {
           if (!document.querySelector('#datepicker-input')._flatpickr) {
             flatpickr('#datepicker-input', {
-              dateFormat: 'Y-m-d',
+              dateFormat: 'd/m/Y',
+              defaultDate: 'today',  // Set the default date to today's date
               onChange: function(selectedDates, dateStr, instance) {
                 window.location.href = '/calendar?date=' + dateStr;
               }
@@ -59,6 +60,7 @@
           }
         });
       </script>
+
 
       <!-- Notification Icon and Dropdown -->
       <li class="nav-item dropdown">
