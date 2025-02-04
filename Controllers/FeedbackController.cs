@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace _.Controllers;
 
-[Authorize(Roles = "Admin, ChefProjet")]
+
 [Authorize]
 public class FeedbackController : Controller
 {
@@ -19,7 +19,6 @@ public class FeedbackController : Controller
 
     // GET: Feedback/Create 
     [HttpGet]
-    [Authorize(Roles = "Admin, ChefProjet, Employee")]
     public IActionResult Create()
     {
         return View();
@@ -29,7 +28,6 @@ public class FeedbackController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Route("/Feedback")]
-    [Authorize(Roles = "Admin, ChefProjet, Employee")]
     public async Task<IActionResult> Create([Bind("Subject, Message,Rating")] Feedback feedback)
     {
         if (ModelState.IsValid)
@@ -40,7 +38,7 @@ public class FeedbackController : Controller
 
         return View(feedback);
     }
-
+    [Authorize(Roles = "Admin, ChefProjet")]
     // GET: Feedback/Details/{id}
     [HttpGet]
     public async Task<IActionResult> Details(int id)
@@ -53,7 +51,7 @@ public class FeedbackController : Controller
 
         return View(feedback);
     }
-
+    [Authorize(Roles = "Admin, ChefProjet")]
     // GET: Feedback/Delete/{id}
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
@@ -66,7 +64,7 @@ public class FeedbackController : Controller
 
         return View(feedback);
     }
-
+    [Authorize(Roles = "Admin, ChefProjet")]
     // POST: Feedback/Delete/{id}
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
@@ -78,6 +76,7 @@ public class FeedbackController : Controller
 
     [HttpGet]
     [Route("Feedback/GetAllFeedbacks")]
+    [Authorize(Roles = "Admin, ChefProjet")]
     public async Task<IActionResult> GetAllFeedbacks()
     {
         try
