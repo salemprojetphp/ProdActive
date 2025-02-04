@@ -56,12 +56,21 @@ builder.Services.AddScoped<IRepository<TrackedProjects>, Repository<TrackedProje
 builder.Services.AddScoped<IRepository<ReunionParticipant>, Repository<ReunionParticipant>>();
 builder.Services.AddScoped<IRepository<Feedback>, Repository<Feedback>>();
 builder.Services.AddScoped<IRepository<Pointage>, Repository<Pointage>>();
+builder.Services.AddScoped<IRepository<Tache>, Repository<Tache>>();
 builder.Services.AddScoped<ProductivityML>();
 
 // SERVICES
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IPointageService, PointageService>();
+builder.Services.AddScoped<ITacheService, TacheService>();
+
+
+
+
+// Add DbContext and Identity services
+
+builder.Services.AddScoped(typeof(IRepository<Feedback>), typeof(Repository<Feedback>));
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 
 //  Register Sentiment Analysis Service
