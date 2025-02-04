@@ -178,18 +178,19 @@ public static class AttendanceHelper{
 
     public static Dictionary<string, double> GetAvgWorkingHours(IEnumerable<Pointage> pointages)
     {
-        var workingHours = pointages
-            .Where(p => p.Date >= DateTime.Now.AddMonths(-2)) // Last 2 months
-            .OrderBy(p => p.Date) // Ensure transactions are in order
-            .GroupBy(p => new { p.EmployeeId, p.Date.Date }) // Group by Employee and Date
+        if (pointages == null) return new Dictionary<string, double>();
+
+        return pointages
+            .Where(p => p != null && 
+                    p.EmployeeId != null && 
+                    p.Date >= DateTime.Now.AddMonths(-2))
+            .OrderBy(p => p.Date)
+            .GroupBy(p => new { p.EmployeeId, p.Date.Date })
             .Select(g => new
             {
-                EmployeeId = g.Key.EmployeeId,
+                EmployeeId = g.Key.EmployeeId.Trim(), // Ensure non-null and clean
                 Date = g.Key.Date,
-                WorkingHours = g.Any(p => p.TransactionType == 1) && g.Any(p => p.TransactionType == -1)
-                    ? (g.Where(p => p.TransactionType == -1).Max(p => p.Date) - 
-                    g.Where(p => p.TransactionType == 1).Min(p => p.Date)).TotalHours
-                    : 0 // If missing entry or exit, assume 0 hours
+                WorkingHours = CalculateHours(g)
             })
             .GroupBy(p => p.EmployeeId)
             .Select(g => new
@@ -197,46 +198,80 @@ public static class AttendanceHelper{
                 EmployeeId = g.Key,
                 AvgWorkingHours = g.Average(p => p.WorkingHours)
             })
-            .ToList();
-
-        return workingHours.ToDictionary(wh => wh.EmployeeId.ToString(), wh => wh.AvgWorkingHours);
+            .Where(wh => !string.IsNullOrWhiteSpace(wh.EmployeeId))
+            .ToDictionary(
+                wh => wh.EmployeeId, // Already verified as non-null
+                wh => wh.AvgWorkingHours
+            );
     }
 
+    private static double CalculateHours(IGrouping<dynamic, Pointage> group)
+    {
+        try 
+        {
+            var exitTime = group.Where(p => p.TransactionType == -1).Max(p => p.Date);
+            var entryTime = group.Where(p => p.TransactionType == 1).Min(p => p.Date);
+            return (exitTime - entryTime).TotalHours;
+        }
+        catch
+        {
+            return 0; // Handle missing/mismatched entries
+        }
+    }
     public static Dictionary<string, double> GetAttendanceRate(IEnumerable<Pointage> pointages)
     {
-        var attendanceRate = pointages
-            .Where(p => p.Date >= DateTime.Now.AddMonths(-1)) // Last month
+        if (pointages == null) return new Dictionary<string, double>();
+
+        return pointages
+            .Where(p => p != null && 
+                    p.EmployeeId != null && 
+                    p.Date >= DateTime.Now.AddMonths(-1))
             .GroupBy(p => new { p.EmployeeId, p.Date.Date })
             .Select(g => new
             {
-                EmployeeId = g.Key.EmployeeId,
+                EmployeeId = g.Key.EmployeeId?.Trim() ?? string.Empty,
                 Date = g.Key.Date,
-                Present = g.Any(p => p.TransactionType == 1) // Simplified logic
+                Present = g.Any(p => p.TransactionType == 1)
             })
-            .GroupBy(p => p.EmployeeId)
-            .Select(g => new
+            .Where(x => !string.IsNullOrWhiteSpace(x.EmployeeId))
+            .GroupBy(x => x.EmployeeId)
+            .Select(g =>
             {
-                EmployeeId = g.Key,
-                AttendanceRate = (double)g.Count(p => p.Present) / g.Select(p => p.Date).Distinct().Count() * 100
+                var totalDays = g.Select(p => p.Date).Distinct().Count();
+                return new
+                {
+                    EmployeeId = g.Key,
+                    AttendanceRate = totalDays > 0 
+                        ? (double)g.Count(p => p.Present) / totalDays * 100
+                        : 0
+                };
             })
-            .ToList();
-
-        return attendanceRate.ToDictionary(ar => ar.EmployeeId.ToString(), ar => ar.AttendanceRate);
+            .ToDictionary(
+                ar => ar.EmployeeId,
+                ar => ar.AttendanceRate
+            );
     }
 
     public static Dictionary<string, int> GetLateArrivals(IEnumerable<Pointage> pointages)
     {
-        var lateArrivals = pointages
-            .Where(p => p.Date >= DateTime.Now.AddMonths(-1) && p.TransactionType == 1) // Last month, entry points
-            .GroupBy(p => p.EmployeeId)
+        if (pointages == null) return new Dictionary<string, int>();
+
+        return pointages
+            .Where(p => p != null && 
+                    p.EmployeeId != null &&
+                    p.Date >= DateTime.Now.AddMonths(-1) &&
+                    p.TransactionType == 1)
+            .GroupBy(p => p.EmployeeId.Trim())
             .Select(g => new
             {
                 EmployeeId = g.Key,
-                LateCount = g.Count(p => p.Date.Hour >= 9) // Count late arrivals (after 9 AM)
+                LateCount = g.Count(p => p.Date.TimeOfDay >= new TimeSpan(9, 0, 0))
             })
-            .ToList();
-
-        return lateArrivals.ToDictionary(la => la.EmployeeId.ToString(), la => la.LateCount);
+            .Where(x => !string.IsNullOrWhiteSpace(x.EmployeeId))
+            .ToDictionary(
+                la => la.EmployeeId,
+                la => la.LateCount
+            );
     }
 
     public static Dictionary<string, double> GetLeaveUtilizationRate(IEnumerable<Conge> conges)
