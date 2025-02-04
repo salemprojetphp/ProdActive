@@ -11,6 +11,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 
 [Authorize]
+[Authorize(Roles = "Admin")]
 public class DashboardController : Controller
 {
     private readonly ILogger<DashboardController> _logger;
@@ -22,7 +23,6 @@ public class DashboardController : Controller
     }
 
     [Route("/Dashboard/Employee")]
-    [Authorize(Roles = "ChefProjet")]
     [Authorize]
     public async Task<IActionResult> Employee()
     {
@@ -82,7 +82,6 @@ public class DashboardController : Controller
         return View(employeeDashboardVM);
     }
     
-    [Authorize(Roles = "ChefProjet")]
     [Route("/Dashboard/Attendance")]
     [Authorize]
     public async Task<IActionResult> Attendance()
@@ -140,7 +139,6 @@ public class DashboardController : Controller
     }
 
     [Route("/Dashboard/Feedbacks")]
-    [Authorize(Roles = "ChefProjet")]
     [Authorize]
     public async Task<IActionResult> Feedbacks()
     {
@@ -172,7 +170,6 @@ public class DashboardController : Controller
     }
 
     [Route("/Dashboard/FeedbacksData")]
-    [Authorize(Roles = "ChefProjet")]
     [Authorize]
     public async Task<IActionResult> GetFeedbackData()
     {
@@ -191,7 +188,6 @@ public class DashboardController : Controller
     }
 
     [Route("/Dashboard/FeedbackPercentages")]
-    [Authorize(Roles = "ChefProjet")]
     [Authorize]
     public async Task<IActionResult> GetFeedbackPercentages()
     {

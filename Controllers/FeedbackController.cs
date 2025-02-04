@@ -19,6 +19,7 @@ public class FeedbackController : Controller
 
     // GET: Feedback/Create 
     [HttpGet]
+    [Authorize(Roles = "Admin, ChefProjet, Employee")]
     public IActionResult Create()
     {
         return View();
@@ -28,6 +29,7 @@ public class FeedbackController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Route("/Feedback")]
+    [Authorize(Roles = "Admin, ChefProjet, Employee")]
     public async Task<IActionResult> Create([Bind("Subject, Message,Rating")] Feedback feedback)
     {
         if (ModelState.IsValid)
