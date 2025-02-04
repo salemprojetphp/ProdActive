@@ -30380,3 +30380,25 @@ dl li {
   outline: 1px solid slategrey;
 }
 /*# sourceMappingURL=maps/style.css.map */
+/* Add this to your CSS file or within a <style> tag */
+@keyframes fadeOutClose {
+  0% {
+      opacity: 1;
+      transform: translateY(0);
+      height: auto;  /* Keep the height initially */
+  }
+  100% {
+      opacity: 0;
+      transform: translateY(-20px); /* Move the element up */
+      height: 0;  /* Collapse the height */
+      padding: 0; /* Remove padding if necessary */
+      margin: 0;  /* Remove margin if necessary */
+  }
+}
+
+/* Add this class for the fade-out-close effect */
+.fade-out-close {
+  animation: fadeOutClose 1s ease-in-out forwards;
+  overflow: hidden;  /* Ensure content is hidden when the element collapses */
+}
+
